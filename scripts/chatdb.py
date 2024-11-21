@@ -14,8 +14,16 @@ Functions in secondary py files
     Generating queries] * 2 
 """
 
-mongo_username = 'mdmolnar'
-mongo_password = 'AtM0nG0d1452'
+
+login_info = {
+    'endpoint': "localhost",
+    'username': "root",
+    'password': "MySQLDBP455",
+    'database_name': "chatdb",
+    'mongo_username': 'mdmolnar',
+    'mongo_password': 'AtM0nG0d1452'
+}
+
 
 memory = []
 
@@ -42,10 +50,10 @@ def chatdb():
             print('upload in kywds')
             if 'SQL' in keywords:
                 print('SQL in keywords')
-                sql_upload(user_input)
+                sql_upload(user_input, login_info)
             if 'MONGODB' in keywords:
                 print('Mongo in kywds')
-                mongo_upload(user_input)
+                mongo_upload(user_input, login_info)
 
 
         if 'EXAMPLE' in keywords:

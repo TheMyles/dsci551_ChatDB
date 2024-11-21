@@ -4,7 +4,7 @@ import pandas as pd
 import json
 from bson import ObjectId
 
-def mongo_upload(user_input):
+def mongo_upload(user_input, login_info):
     # Extract file path from user input
     file_path = None
     for i in user_input.split():
@@ -20,8 +20,8 @@ def mongo_upload(user_input):
     table_name = file_path.split('/')[-1].split('.')[0]
 
     # MongoDB credentials and connection string
-    mongo_username = 'mdmolnar'
-    mongo_password = 'AtM0nG0d1452'
+    mongo_username = login_info['mongo_username']
+    mongo_password = login_info['mongo_password']
 
     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
     try:
@@ -79,7 +79,7 @@ def convert_extended_json(doc):
             doc[key] = [convert_extended_json(item) if isinstance(item, dict) else item for item in value]
     return doc
 
-def sql_upload(user_input):
+def sql_upload(user_input, login_info):
 
     for i in user_input.split():
         if '/' in i or '\\' in i:
@@ -89,19 +89,19 @@ def sql_upload(user_input):
     extension = file_path.split('/')[-1].split('.')[1]
 
     if extension == 'csv':
-        sql_csv_upload(user_input)
+        sql_csv_upload(user_input, login_info)
     else:
-        execute_sql_file(user_input)
+        execute_sql_file(user_input, login_info)
 
     return
 
 
-def sql_csv_upload(user_input):
+def sql_csv_upload(user_input, login_info):
 
-    endpoint = "localhost"
-    username = "root"
-    password = "MySQLDBP455"
-    database_name = "chatdb"
+    endpoint = login_info['endpoint']
+    username = login_info['username']
+    password = login_info['password']
+    database_name = login_info['database_name']
     port = 3306 
 
     connection = pymysql.connect(
@@ -179,12 +179,12 @@ def python_to_sql_type(dtype):
         return 'VARCHAR(255)'  # Default fallback type
     
 
-def execute_sql_file(user_input):
+def execute_sql_file(user_input, login_info):
 
-    endpoint = "localhost"
-    username = "root"
-    password = "MySQLDBP455"
-    database_name = "chatdb"
+    endpoint = login_info['endpoint']
+    username = login_info['username']
+    password = login_info['password']
+    database_name = login_info['database_name']
 
     file_path = None
     for i in user_input.split():
