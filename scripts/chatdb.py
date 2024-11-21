@@ -1,6 +1,8 @@
 import pymysql
 import pymongo
 import sys
+from input_process import match_query_pattern
+from upload import sql_upload
 
 """
 Setup MySQL DB
@@ -22,11 +24,23 @@ def chatdb():
 
     while continue_running:
         reponse = ''
-        query = input("Query: ")
-        
-        keywords = (query)
+        user_input = input("Query: ")
 
-        if 'example' in keywords:
+        if user_input == 'exit':
+            continue_running = False
+            continue
+        
+        keywords = match_query_pattern(user_input)
+        print("Keywords:", keywords)
+
+        if "UPLOAD" in keywords:
+            print('upload in kywds')
+            if 'SQL' in keywords:
+                print('SQL in keywords')
+                sql_upload(user_input)
+
+        if 'EXAMPLE' in keywords:
+            print('example in keywds')
             response = (keywords)
 
 
