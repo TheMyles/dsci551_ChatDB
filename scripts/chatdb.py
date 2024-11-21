@@ -21,15 +21,20 @@ memory = []
 
 def chatdb():
     continue_running = True
+    print("Hello! Welcome to ChatDB.")
+    print("Would you like to upload your own dataset or explore our system's pre-uploaded datasets?")
 
     while continue_running:
         reponse = ''
-        user_input = input("Query: ")
+        user_input = input("Message ChatDB: ")
 
+        # Exiting ChatDB
         if user_input == 'exit':
             continue_running = False
+            print("Goodbye! Thank you for using ChatDB.")
             continue
         
+        # Get keywords from user input
         keywords = match_query_pattern(user_input)
         print("Keywords:", keywords)
 
