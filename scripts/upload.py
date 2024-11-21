@@ -90,8 +90,10 @@ def sql_upload(user_input, login_info):
 
     if extension == 'csv':
         sql_csv_upload(user_input, login_info)
-    else:
+    elif extension == 'sql':
         execute_sql_file(user_input, login_info)
+    else:
+        print(f"Unsupported filetype {extension}, please upload either csv or sql")
 
     return
 

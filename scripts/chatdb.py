@@ -35,6 +35,7 @@ def chatdb():
     while continue_running:
         reponse = ''
         user_input = input("Message ChatDB: ")
+        memory.append(user_input)
 
         # Exiting ChatDB
         if user_input == 'exit':
@@ -51,9 +52,11 @@ def chatdb():
             if 'SQL' in keywords:
                 print('SQL in keywords')
                 sql_upload(user_input, login_info)
-            if 'MONGODB' in keywords:
+            elif 'MONGODB' in keywords:
                 print('Mongo in kywds')
                 mongo_upload(user_input, login_info)
+            else:
+                print('Please specify either SQL or NoSQL upload.')
 
 
         if 'EXAMPLE' in keywords:

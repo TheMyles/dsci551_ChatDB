@@ -1,5 +1,4 @@
-{
-"course":[
+[
  {
   "course_id": 5,
   "courseLevel": "Level_300"
@@ -529,4 +528,3 @@
   "courseLevel": "Level_500"
  }
 ]
-}
