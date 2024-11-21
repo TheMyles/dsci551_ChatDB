@@ -2,7 +2,7 @@ import pymysql
 import pymongo
 import sys
 from input_process import match_query_pattern
-from upload import sql_upload
+from upload import sql_upload, mongo_upload
 
 """
 Setup MySQL DB
@@ -43,6 +43,10 @@ def chatdb():
             if 'SQL' in keywords:
                 print('SQL in keywords')
                 sql_upload(user_input)
+            if 'MONGODB' in keywords:
+                print('Mongo in kywds')
+                mongo_upload(user_input)
+
 
         if 'EXAMPLE' in keywords:
             print('example in keywds')
