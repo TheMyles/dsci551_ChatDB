@@ -1,11 +1,6 @@
-import nltk
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
-from collections import Counter
-import numpy as np
 from nltk.util import ngrams
-from nltk.corpus import wordnet as wn
-
 
 QUERY_PATTERNS = {
     "EXAMPLE": ["example", "examples", "sample", "instance", "demo", "case"],
@@ -29,7 +24,6 @@ QUERY_PATTERNS = {
     "SQL": ['sql', 'mysql'],
     "MONGODB": ['mongo', 'mongodb', 'nosql']
 }
-
 
 def match_query_pattern(user_input):
     tokens = word_tokenize(user_input.lower())
