@@ -30,8 +30,12 @@ def match_query_pattern(user_input):
     tokens = word_tokenize(user_input.lower())
     tokens = [token for token in tokens if token.isalnum()]  # Remove punctuation
     stop_words = set(stopwords.words('english'))
+
+    for words in QUERY_PATTERNS.values():
+        stop_words -= set(words)
+
     filtered_tokens = [token for token in tokens if token not in stop_words]
-    
+    print(filtered_tokens)
     # Detect n-grams (e.g., "group by")
     bigrams = list(ngrams(tokens, 2))
     phrases = [" ".join(bigram) for bigram in bigrams]
