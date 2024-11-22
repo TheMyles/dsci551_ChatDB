@@ -1,0 +1,842 @@
+[
+ {
+  "city": "alameda",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "alamo",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "albany",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "alviso",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "american canyon",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "angwin",
+  "county": "napa county",
+  "region": "napa valley"
+ },
+ {
+  "city": "antioch",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "aptos",
+  "county": "santa cruz county",
+  "region": "bay area"
+ },
+ {
+  "city": "aromas",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "atherton",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "banta",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "belmont",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "belvedere tiburon",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "ben lomond",
+  "county": "santa cruz county",
+  "region": "bay area"
+ },
+ {
+  "city": "benicia",
+  "county": "solano county",
+  "region": "bay area"
+ },
+ {
+  "city": "berkeley",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "bethel island",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "big sur",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "bodega bay",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "boulder creek",
+  "county": "santa cruz county",
+  "region": "bay area"
+ },
+ {
+  "city": "brentwood",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "brisbane",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "burlingame",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "byron",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "calistoga",
+  "county": "napa county",
+  "region": "napa valley"
+ },
+ {
+  "city": "campbell",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "capitola",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "carmel",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "castro valley",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "castroville",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "cerritos",
+  "county": "los angeles county",
+  "region": "los angeles area"
+ },
+ {
+  "city": "charlotte",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "clayton",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "colma",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "columbia",
+  "county": "tuolumne county",
+  "region": "yosemite and mono lake area"
+ },
+ {
+  "city": "concord",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "corte madera",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "cotati",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "crockett",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "cupertino",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "daly city",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "danville",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "davenport",
+  "county": "santa cruz county",
+  "region": "bay area"
+ },
+ {
+  "city": "davis",
+  "county": "yolo county",
+  "region": "sacramento area"
+ },
+ {
+  "city": "dixon",
+  "county": "solano county",
+  "region": "bay area"
+ },
+ {
+  "city": "dublin",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "eagan",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "east palo alto",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "el cerrito",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "el granada",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "el sobrante",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "emeryville",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "fairfield",
+  "county": "solano county",
+  "region": "bay area"
+ },
+ {
+  "city": "felton",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "forestville",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "fort bragg",
+  "county": "mendocino county",
+  "region": "northern california"
+ },
+ {
+  "city": "foster city",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "freedom",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "fremont",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "gilroy",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "glen ellen",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "grass valley",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "half moon bay",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "hayward",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "healdsburg",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "hercules",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "hollister",
+  "county": "san benito county",
+  "region": "northern california"
+ },
+ {
+  "city": "inverness",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "jenner",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "kensington",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "kenwood",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "la honda",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "lafayette",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "larkspur",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "livermore",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "los altos",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "los gatos",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "mammoth lakes",
+  "county": "unknown",
+  "region": "yosemite and mono lake area"
+ },
+ {
+  "city": "mare island",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "marietta",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "marina",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "martinez",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "menlo park",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "mill valley",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "millbrae",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "milpitas",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "montara",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "monte vista",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "monterey",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "moraga",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "morgan hill",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "moss beach",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "moss landing",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "mountain view",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "napa",
+  "county": "napa county",
+  "region": "napa valley"
+ },
+ {
+  "city": "newark",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "novato",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "oakland",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "oakley",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "oakville",
+  "county": "napa county",
+  "region": "napa valley"
+ },
+ {
+  "city": "orinda",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "pacheco",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "pacific grove",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "pacifica",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "palo alto",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "pengrove",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "pescadero",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "petaluma",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "piedmont",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "pinole",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "pittsburg",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "pleasant hill",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "pleasanton",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "port costa",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "portola valley",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "redwood city",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "richmond",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "rio del mar",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "rio vista",
+  "county": "solano county",
+  "region": "bay area"
+ },
+ {
+  "city": "rodeo",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "rohnert park",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "rutherford",
+  "county": "napa county",
+  "region": "napa valley"
+ },
+ {
+  "city": "saint helena",
+  "county": "napa county",
+  "region": "napa valley"
+ },
+ {
+  "city": "salinas",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "san anselmo",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "san bruno",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "san carlos",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "san francisco",
+  "county": "san francisco county",
+  "region": "bay area"
+ },
+ {
+  "city": "san jose",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "san juan bautista",
+  "county": "san benito county",
+  "region": "northern california"
+ },
+ {
+  "city": "san leandro",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "san lorenzo",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "san martin",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "san mateo",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "san pablo",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "san rafael",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "san ramon",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "santa clara",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "santa cruz",
+  "county": "santa cruz county",
+  "region": "bay area"
+ },
+ {
+  "city": "santa rosa",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "saratoga",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "sausalito",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "scotts valley",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "seaside",
+  "county": "monterey county",
+  "region": "monterey"
+ },
+ {
+  "city": "sebastopol",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "sonoma",
+  "county": "sonoma county",
+  "region": "bay area"
+ },
+ {
+  "city": "sonora",
+  "county": "tuolumne county",
+  "region": "yosemite and mono lake area"
+ },
+ {
+  "city": "soquel",
+  "county": "unknown",
+  "region": "bay area"
+ },
+ {
+  "city": "south lake tahoe",
+  "county": "el dorado county",
+  "region": "lake tahoe"
+ },
+ {
+  "city": "south san francisco",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "suisun city",
+  "county": "solano county",
+  "region": "bay area"
+ },
+ {
+  "city": "sunnyvale",
+  "county": "santa clara county",
+  "region": "bay area"
+ },
+ {
+  "city": "tahoe city",
+  "county": "placer county",
+  "region": "lake tahoe"
+ },
+ {
+  "city": "tahoe vista",
+  "county": "placer county",
+  "region": "lake tahoe"
+ },
+ {
+  "city": "tiburon",
+  "county": "marin county",
+  "region": "bay area"
+ },
+ {
+  "city": "tracy",
+  "county": "san joaquin county",
+  "region": "unknown"
+ },
+ {
+  "city": "tres pinos",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "ukiah",
+  "county": "mendocino county",
+  "region": "northern california"
+ },
+ {
+  "city": "union city",
+  "county": "alameda county",
+  "region": "bay area"
+ },
+ {
+  "city": "vacaville",
+  "county": "solano county",
+  "region": "bay area"
+ },
+ {
+  "city": "vallejo",
+  "county": "solano county",
+  "region": "bay area"
+ },
+ {
+  "city": "vancouver",
+  "county": "unknown",
+  "region": "unknown"
+ },
+ {
+  "city": "walnut creek",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "watsonville",
+  "county": "santa cruz county",
+  "region": "bay area"
+ },
+ {
+  "city": "west pittsburg",
+  "county": "contra costa county",
+  "region": "bay area"
+ },
+ {
+  "city": "winters",
+  "county": "yolo county",
+  "region": "sacramento area"
+ },
+ {
+  "city": "woodside",
+  "county": "san mateo county",
+  "region": "bay area"
+ },
+ {
+  "city": "yountville",
+  "county": "napa county",
+  "region": "napa valley"
+ }
+]
