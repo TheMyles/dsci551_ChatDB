@@ -3,42 +3,61 @@ import pymongo
 
 # import mysql.connector
 
-def get_mysql_metadata(connection, database_name):
+def get_mysql_metadata(login_info):
     metadata = {}  # Dictionary to store table and column names
+
+    connection = pymysql.connect(
+        host=login_info['endpoint'],
+        user=login_info['username'],
+        password=login_info['password'],
+        db=login_info['database_name']
+    )
+
     cursor = connection.cursor()
-    cursor.execute(f"USE {database_name}")
     
     # Get all table names
     cursor.execute("SHOW TABLES")
     tables = [table[0] for table in cursor.fetchall()]
     
     for table in tables:
-        print("=" * 20)  # Separator line
-        print(f"Table: {table}")
+        # print("=" * 20)  # Separator line
+        # print(f"Table: {table}")
         
         cursor.execute(f"DESCRIBE {table}")
         columns = [row[0] for row in cursor.fetchall()]  # Extract column names only
         metadata[table] = columns  # Store columns under the respective table
         
-        for column in columns:
-            print(f"Column: {column}")
+        # for column in columns:
+        #     print(f"Column: {column}")
+    
+    connection.close()
     
     return metadata
 
 # Example usage
+
+login_info = {
+    'endpoint': "localhost",
+    'username': "root",
+    'password': "MySQLDBP455",
+    'database_name': "chatdb",
+    'mongo_username': 'mdmolnar',
+    'mongo_password': 'AtM0nG0d1452'
+}
+
 endpoint = "localhost"
 username = "root"
-passwordjacob = "Bobo8128!"
+passwordjacob = "MySQLDBP455"
 database_name = "chatdb"
 
 connection = pymysql.connect(
-    host=endpoint,
-    user=username,
-    password=passwordjacob,
-    database=database_name
+    host=login_info['endpoint'],
+    user=login_info['username'],
+    password=login_info['password'],
+    db=login_info['database_name']
 )
 
-metadata = get_mysql_metadata(connection, "chatdb")
+metadata = get_mysql_metadata(login_info)
 print("\nMetadata:")
 print(metadata)
 

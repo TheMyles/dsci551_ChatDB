@@ -17,7 +17,7 @@ QUERY_PATTERNS = {
                  "sequence", "order", "hierarchy", "top", "bottom", "sorted"],
     "WHERE": ["where", "condition", "filter", "over", "under", "less", "greater", "who",
               "which", "that", "criteria", "subset", "find", "limit", "restrict", "search",
-              "match", "constraint", 'in the'],
+              "match", "constraint"],
     "JOIN": ["join", "merge", "combine", "foreign key", "unite", "relate", "link",
              "connect", "associate", "bridge", "union", "inner", "outer", "left", "right"],
     "LIMIT": ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest'],

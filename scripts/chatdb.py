@@ -18,7 +18,7 @@ Functions in secondary py files
 login_info = {
     'endpoint': "localhost",
     'username': "root",
-    'password': "Bobo8128!",
+    'password': "MySQLDBP455",
     'database_name': "chatdb",
     'mongo_username': 'mdmolnar',
     'mongo_password': 'AtM0nG0d1452'
