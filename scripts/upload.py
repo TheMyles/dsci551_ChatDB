@@ -24,6 +24,7 @@ def mongo_upload(user_input, login_info):
     mongo_password = login_info['mongo_password']
 
     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
+
     try:
         # Connect to MongoDB
         client = pymongo.MongoClient(connection_string)
@@ -52,6 +53,7 @@ def mongo_upload(user_input, login_info):
             # Insert data into the collection
             result = collection.insert_many(data)
             print(f"Inserted {len(result.inserted_ids)} documents into collection '{table_name}'.")
+            show_collection(5, table_name, login_info)
         except FileNotFoundError:
             print("The specified JSON file does not exist.")
         except json.JSONDecodeError:
@@ -156,6 +158,9 @@ def sql_csv_upload(user_input, login_info):
                 cursor.execute(insert_query, values)  # Execute query with values
 
             connection.commit()
+            print('Data successfully added.')
+            show_sql_table(5, table_name, login_info)
+
     except pymysql.IntegrityError as e:
         print(f"Integrity Error: {e}")
     finally:
@@ -212,12 +217,16 @@ def execute_sql_file(user_input, login_info):
             # Split SQL commands by semicolon
             for command in sql_commands.split(';'):
                 command = command.strip()
+                if 'CREATE TABLE' in command:
+                    table_name = command.split()[2].strip('`')
+
                 if command:  # Ignore empty commands
                     cursor.execute(command)
 
         # Commit changes
         connection.commit()
         print("All SQL commands executed successfully.")
+        show_sql_table(5, table_name, login_info)
 
     except pymysql.MySQLError as e:
         print(f"Error while connecting to MySQL: {e}")
@@ -226,4 +235,82 @@ def execute_sql_file(user_input, login_info):
     finally:
         if connection:
             connection.close()
+
+
+def show_sql_table(n_rows, table, login_info):
+    try:
+        # Establish a database connection
+        connection = pymysql.connect(
+            host=login_info['endpoint'],
+            user=login_info['username'],
+            password=login_info['password'],
+            db=login_info['database_name']
+        )
+        cursor = connection.cursor()
+
+        # Construct the SQL query
+        query = f"SELECT * FROM {table} LIMIT {n_rows};"
+
+        # Execute the query
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        column_names = [desc[0] for desc in cursor.description]
+
+        # Display the data
+        if rows:
+            print(f"\nShowing {len(rows)} rows from table \'{table}\':\n")
+
+            # Attempt to use pandas for a pretty table display
+            try:
+                df = pd.DataFrame(rows, columns=column_names)
+                print(df)
+            except ImportError:
+                # Fallback to line-by-line print
+                print(f"{' | '.join(column_names)}")
+                print("-" * 80)
+                for row in rows:
+                    print(" | ".join(map(str, row)))
+        else:
+            print(f"No data found in table \'{table}\'.")
+        
+        connection.close()
+
+    except pymysql.Error as e:
+        print(f"An error occurred: {e}")
+        return 
+    
+    return
+
+def show_collection(n_docs, collection_name, login_info):
+
+    try:
+
+        mongo_username = login_info['mongo_username']
+        mongo_password = login_info['mongo_password']
+
+        connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
+
+        # Establish a MongoDB connection
+        client = pymongo.MongoClient(connection_string)
+        db = client['ChatDB']
+        collection = db[collection_name]
+
+        # Fetch the documents
+        documents = list(collection.find().limit(n_docs))
+
+        # Display the documents
+        if documents:
+            print(f"\nShowing {len(documents)} documents from collection \'{collection_name}\':")
+
+            for i, doc in enumerate(documents, start=1):
+                print(f"{i}: {doc}")
+        else:
+            print(f"No documents found in collection \'{collection_name}\'.")
+
+        # Close the connection
+        client.close()
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
 
