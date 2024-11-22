@@ -4,6 +4,7 @@ from nltk.util import ngrams
 
 QUERY_PATTERNS = {
     "EXAMPLE": ["example", "examples", "sample", "instance", "demo", "case"],
+    "SHOW": ["show", 'tables', 'all', 'describe'],
     "UPLOAD": ["upload", "add", "insert", "import", "save", "load", "store"],
     "SELECT": ["select", "columns", "fields", "retrieve", "get", "show", "fetch", "extract",
                "display", "list", "view", "pick", "choose", "read", "query"],

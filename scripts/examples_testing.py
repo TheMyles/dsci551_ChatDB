@@ -5,10 +5,17 @@ import pymongo
 
 from decimal import Decimal
 
-def get_mysql_metadata(connection, database_name):
+def get_mysql_metadata(login_info):
     metadata = {}
+
+    connection = pymysql.connect(
+        host=login_info['endpoint'],
+        user=login_info['username'],
+        password=login_info['password'],
+        database=login_info['database_name']
+    )
+
     cursor = connection.cursor()
-    cursor.execute(f"USE {database_name}")
     
     # Get all table names
     cursor.execute("SHOW TABLES")
@@ -45,12 +52,21 @@ def get_mysql_metadata(connection, database_name):
     return metadata
 
 
-
 # Example usage
 endpoint = "localhost"
 username = "root"
-passwordjacob = "Bobo8128!"
+passwordjacob = "MySQLDBP455"
 database_name = "chatdb"
+
+login_info = {
+    'endpoint': "localhost",
+    'username': "root",
+    'password': "MySQLDBP455",
+    'database_name': "chatdb",
+    'mongo_username': 'mdmolnar',
+    'mongo_password': 'AtM0nG0d1452'
+}
+
 
 connection = pymysql.connect(
     host=endpoint,
@@ -59,9 +75,9 @@ connection = pymysql.connect(
     database=database_name
 )
 
-metadata = get_mysql_metadata(connection, "chatdb")
-print("="* 100)
-print(metadata['generalinfo'])
+metadata = get_mysql_metadata(login_info)
+# print("="* 100)
+# print(metadata['generalinfo'])
 
 # print("\nMetadata:")
 # print(metadata)

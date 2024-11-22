@@ -58,8 +58,10 @@ def chatdb():
             else:
                 print('Please specify either SQL or NoSQL upload.')
 
-
-        if 'EXAMPLE' in keywords:
+        elif 'SHOW' in keywords:
+            print('showing tables')
+            
+        elif 'EXAMPLE' in keywords:
             print('example in keywds')
             response = (keywords)
 
