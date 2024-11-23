@@ -32,7 +32,7 @@ def get_mysql_metadata(login_info):
         # Fetch unique values for each column
         for column in columns:
             column_name = column["name"]
-            cursor.execute(f"SELECT DISTINCT `{column_name}` FROM `{table}` LIMIT 5")  # Limit for performance
+            cursor.execute(f"SELECT DISTINCT `{column_name}` FROM `{table}`")  # Limit for performance
             unique_values = [row[0] for row in cursor.fetchall()]
             
             # Convert Decimal to float if applicable
@@ -53,29 +53,29 @@ def get_mysql_metadata(login_info):
 
 
 # Example usage
-endpoint = "localhost"
-username = "root"
-passwordjacob = "MySQLDBP455"
-database_name = "chatdb"
+# endpoint = "localhost"
+# username = "root"
+# passwordjacob = "MySQLDBP455"
+# database_name = "chatdb"
 
-login_info = {
-    'endpoint': "localhost",
-    'username': "root",
-    'password': "MySQLDBP455",
-    'database_name': "chatdb",
-    'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452'
-}
+# login_info = {
+#     'endpoint': "localhost",
+#     'username': "root",
+#     'password': "MySQLDBP455",
+#     'database_name': "chatdb",
+#     'mongo_username': 'mdmolnar',
+#     'mongo_password': 'AtM0nG0d1452'
+# }
 
 
-connection = pymysql.connect(
-    host=endpoint,
-    user=username,
-    password=passwordjacob,
-    database=database_name
-)
+# connection = pymysql.connect(
+#     host=endpoint,
+#     user=username,
+#     password=passwordjacob,
+#     database=database_name
+# )
 
-metadata = get_mysql_metadata(login_info)
+# metadata = get_mysql_metadata(login_info)
 # print("="* 100)
 # print(metadata['generalinfo'])
 
@@ -204,10 +204,10 @@ def generate_sql_query(metadata):
     return query
 
 # Generate and print 5 queries at a time
-for _ in range(5):
-    query = generate_sql_query(metadata)
-    print("\nGenerated Query:")
-    print(query)
+# for _ in range(5):
+#     query = generate_sql_query(metadata)
+#     print("\nGenerated Query:")
+#     print(query)
 
 
 '''
