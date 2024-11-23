@@ -4,14 +4,14 @@ from nltk.util import ngrams
 
 QUERY_PATTERNS = {
     "EXAMPLE": ["example", "examples", "sample", "instance", "demo", "case"],
-    "SHOW": ["show", 'tables', 'all', 'describe'],
+    "SHOW": ['tables', 'describe', 'database'],
     "UPLOAD": ["upload", "add", "insert", "import", "save", "load", "store"],
     "SELECT": ["select", "columns", "fields", "retrieve", "get", "show", "fetch", "extract",
                "display", "list", "view", "pick", "choose", "read", "query"],
     "AGGREGATE": ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
                   "min", "max", "avg", "median", "aggregate", "statistics", "metrics"],
     "GROUP BY": ["group by", "aggregate", "group", "grouping", "each", "total", "categorize",
-                 "partition", "classify", "segment", "cluster", "bucket"],
+                 "partition", "classify", "segment", "cluster", "bucket", 'grouped'],
     "HAVING": ["having", "condition", "filter", "over", "under", "less", "greater", "limit", 'more',
                "range", "restrict", "criteria", "threshold", "constraint", "above", "below"],
     "ORDER BY": ["order by", "sort", "ascending", "descending", "rank", "arrange", "prioritize",
@@ -35,7 +35,7 @@ def match_query_pattern(user_input):
         stop_words -= set(words)
 
     filtered_tokens = [token for token in tokens if token not in stop_words]
-    print(filtered_tokens)
+
     # Detect n-grams (e.g., "group by")
     bigrams = list(ngrams(tokens, 2))
     phrases = [" ".join(bigram) for bigram in bigrams]
@@ -54,5 +54,8 @@ def match_query_pattern(user_input):
     
     if "AGGREGATE" in detected_types and "SELECT" in detected_types:
         detected_types.remove("SELECT")
+    
+    if 'SELECT' not in detected_types and 'AGGREGATE' not in detected_types:
+        detected_types.append('SELECT')
     
     return list(set(detected_types))

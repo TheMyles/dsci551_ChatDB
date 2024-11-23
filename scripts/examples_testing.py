@@ -22,8 +22,8 @@ def get_mysql_metadata(login_info):
     tables = [table[0] for table in cursor.fetchall()]
     
     for table in tables:
-        print("=" * 20)  # Separator line
-        print(f"Table: {table}")
+        # print("=" * 20)  # Separator line
+        # print(f"Table: {table}")
         
         # Get column names and types
         cursor.execute(f"DESCRIBE {table}")
@@ -46,8 +46,8 @@ def get_mysql_metadata(login_info):
         metadata[table] = columns  # Store metadata for the table
         
         # Print metadata for debugging
-        for column in columns:
-            print(f"Column: {column['name']}, Type: {column['type']}, Unique Values: {column['unique_values']}")
+        # for column in columns:
+        #     print(f"Column: {column['name']}, Type: {column['type']}, Unique Values: {column['unique_values']}")
     
     return metadata
 
