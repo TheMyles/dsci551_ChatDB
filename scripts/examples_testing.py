@@ -215,8 +215,8 @@ def get_mysql_metadata(login_info):
     tables = [table[0] for table in cursor.fetchall()]
     
     for table in tables:
-        print("=" * 20)  # Separator line
-        print(f"Table: {table}")
+        # print("=" * 20)  # Separator line
+        # print(f"Table: {table}")
         
         # Get column metadata
         cursor.execute(f"DESCRIBE {table}")
@@ -247,22 +247,49 @@ def get_mysql_metadata(login_info):
         
         # Print metadata for debugging
         for column in columns:
-            print(f"Column: {column['name']}, Type: {column['type']}, Primary Key: {column['primary_key']}, Unique Values: {column['unique_values']}")
+            print(f"Column: {column['name']}, Type: {column['type']}, Unique Values: {column['unique_values']}")
     
     connection.close()  # Close the connection after use
     return metadata
 
 
+# Example usage
+endpoint = "localhost"
+username = "root"
+passwordjacob = "MySQLDBP455"
+database_name = "chatdb"
+
 login_info = {
     'endpoint': "localhost",
     'username': "root",
-    'password': "Bobo8128!",
+    'password': "MySQLDBP455",
     'database_name': "chatdb",
     'mongo_username': 'mdmolnar',
     'mongo_password': 'AtM0nG0d1452'
 }
 
+
+connection = pymysql.connect(
+    host=endpoint,
+    user=username,
+    password=passwordjacob,
+    database=database_name
+)
+
 metadata = get_mysql_metadata(login_info)
+# print("="* 100)
+# print(metadata['generalinfo'])
+
+# print("\nMetadata:")
+# print(metadata)
+
+# metadata = get_mysql_metadata(connection, "chatdb")
+# metadata, table_names, column_names = get_mysql_metadata(connection, "chatdb")
+
+# print("\nTables:")
+# print(table_names)
+# print("\nColumns:")
+# print(column_names)
 
 
 # import random
@@ -602,29 +629,14 @@ keywords = ['order by']
 
 # Generate and print 5 queries at a time
 for _ in range(5):
-    while True:
-        sql_query, summary_text = generate_sql_query(metadata, connection)
-        
-        # Validate the query and ensure it uses the 'review' column
-        if sql_query.startswith("Error:") or not validate_query(sql_query, connection):
-            continue  # Retry if the query is invalid or fails
-        
-        # Check if all keywords are present in the query
-        if not all(keyword.lower() in sql_query.lower() for keyword in keywords):
-            continue  # Retry if the query does not contain all keywords
-        
-        # If valid and includes all keywords, print and break
-        print("\nGenerated Query:")
-        print(sql_query)
-        print("Summary:")
-        print(summary_text)
-        break
+    query = generate_sql_query(metadata)
+    print("\nGenerated Query:")
+    print(query)
 
 
+'''
+values must be selected from the associated column
+choosing from an empty sequence happens when geographic is selected (pronbably)
+dont allow to do numerical stuff by primary key
 
-
-
-
-
-
-
+'''
