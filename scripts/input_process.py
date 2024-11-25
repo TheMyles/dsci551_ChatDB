@@ -15,13 +15,13 @@ QUERY_PATTERNS = {
     "HAVING": ["having", "condition", "filter", "over", "under", "less", "greater", "limit", 'more',
                "range", "restrict", "criteria", "threshold", "constraint", "above", "below"],
     "ORDER BY": ["order by", "sort", "ascending", "descending", "rank", "arrange", "prioritize",
-                 "sequence", "order", "hierarchy", "top", "bottom", "sorted"],
+                 "sequence", "order", "hierarchy", "top", "bottom", "sorted", "biggest"],
     "WHERE": ["where", "condition", "filter", "over", "under", "less", "greater", "who",
               "which", "that", "criteria", "subset", "find", "limit", "restrict", "search",
               "match", "constraint"],
     "JOIN": ["join", "merge", "combine", "foreign key", "unite", "relate", "link",
              "connect", "associate", "bridge", "union", "inner", "outer", "left", "right"],
-    "LIMIT": ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest'],
+    "LIMIT": ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit'],
     "SQL": ['sql', 'mysql'],
     "MONGODB": ['mongo', 'mongodb', 'nosql']
 }

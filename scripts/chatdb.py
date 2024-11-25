@@ -30,7 +30,7 @@ memory = []
 def chatdb():
     continue_running = True
     print("Hello! Welcome to ChatDB.")
-    print("Would you like to upload your own dataset or explore our system's pre-uploaded datasets?")
+    print("Would you like to upload your own dataset or explore our system's pre-uploaded datasets? Type \'exit\' to quit.")
 
     while continue_running:
         reponse = ''
@@ -38,7 +38,7 @@ def chatdb():
         memory.append(user_input)
 
         # Exiting ChatDB
-        if user_input == 'exit':
+        if user_input.lower() == 'exit':
             continue_running = False
             print("Goodbye! Thank you for using ChatDB.")
             continue
