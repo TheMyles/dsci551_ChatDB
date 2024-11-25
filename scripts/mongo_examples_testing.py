@@ -77,7 +77,7 @@ login_info = {
 }
 
 metadata = get_mongodb_metadata(login_info)
-print(metadata)
+# print(metadata)
 
 
     # templates_with_summaries = [
