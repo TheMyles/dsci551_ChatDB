@@ -598,7 +598,11 @@ connection = pymysql.connect(
 #         print(summary_text)
 #         break
 
-keywords = ['order by']
+
+import tabulate
+from tabulate import tabulate
+
+keywords = ['max', 'generalinfo']
 
 # Generate and print 5 queries at a time
 for _ in range(5):
@@ -618,14 +622,19 @@ for _ in range(5):
         print(sql_query)
         print("Summary:")
         print(summary_text)
+
+        # Create a cursor and execute the query
+        cursor = connection.cursor()
+        cursor.execute(sql_query)
+        
+        # Fetch and print the query result in tabular format
+        result = cursor.fetchall()  # Fetch all rows
+        column_names = [desc[0] for desc in cursor.description]  # Get column names
+        
+        print("Output:")
+        # Print the result in a tabular format using tabulate
+        print(tabulate(result, headers=column_names, tablefmt="pretty"))
         break
-
-
-
-
-
-
-
 
 
 
