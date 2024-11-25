@@ -1,5 +1,6 @@
 
-
+user_input = 'show me all columns where food_type is burgers and city is alameda from generalinfo'
+query = SELECT * FROM generalinfo WHERE food_type = 'burgers' AND city = 'alameda' ;
 
 user_input = 'show me the 5 biggest street_num, filter to where city is san francisco and use the location table'
 query = SELECT street_num, city FROM location WHERE city = 'san francisco' ORDER BY street_num DESC LIMIT 5.0;

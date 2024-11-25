@@ -205,7 +205,7 @@ def get_mysql_metadata(login_info):
         host=login_info['endpoint'],
         user=login_info['username'],
         password=login_info['password'],
-        database=login_info['database_name']
+        database=login_info['sql_database_name']
     )
 
     cursor = connection.cursor()
@@ -215,8 +215,8 @@ def get_mysql_metadata(login_info):
     tables = [table[0] for table in cursor.fetchall()]
     
     for table in tables:
-        print("=" * 20)  # Separator line
-        print(f"Table: {table}")
+        # print("=" * 20)  # Separator line
+        # print(f"Table: {table}")
         
         # Get column metadata
         cursor.execute(f"DESCRIBE {table}")
@@ -246,23 +246,23 @@ def get_mysql_metadata(login_info):
         metadata[table] = columns  # Store metadata for the table
         
         # Print metadata for debugging
-        for column in columns:
-            print(f"Column: {column['name']}, Type: {column['type']}, Primary Key: {column['primary_key']}, Unique Values: {column['unique_values']}")
+        # for column in columns:
+        #     print(f"Column: {column['name']}, Type: {column['type']}, Primary Key: {column['primary_key']}, Unique Values: {column['unique_values']}")
     
     connection.close()  # Close the connection after use
     return metadata
 
 
-login_info = {
-    'endpoint': "localhost",
-    'username': "root",
-    'password': "Bobo8128!",
-    'database_name': "chatdb",
-    'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452'
-}
+# login_info = {
+#     'endpoint': "localhost",
+#     'username': "root",
+#     'password': "Bobo8128!",
+#     'database_name': "chatdb",
+#     'mongo_username': 'mdmolnar',
+#     'mongo_password': 'AtM0nG0d1452'
+# }
 
-metadata = get_mysql_metadata(login_info)
+# metadata = get_mysql_metadata(login_info)
 
 
 # import random
@@ -579,12 +579,12 @@ def validate_query(query, connection):
 # }
 
 
-connection = pymysql.connect(
-    host='localhost',
-    user='root',
-    password="Bobo8128!",
-    database="chatdb"
-)
+# connection = pymysql.connect(
+#     host='localhost',
+#     user='root',
+#     password="Bobo8128!",
+#     database="chatdb"
+# )
 
 # # Generate and print 5 queries at a time
 # for _ in range(5):
@@ -602,39 +602,39 @@ connection = pymysql.connect(
 import tabulate
 from tabulate import tabulate
 
-keywords = ['max', 'generalinfo']
+# keywords = ['max', 'generalinfo']
 
 # Generate and print 5 queries at a time
-for _ in range(5):
-    while True:
-        sql_query, summary_text = generate_sql_query(metadata, connection)
+# for _ in range(5):
+#     while True:
+#         sql_query, summary_text = generate_sql_query(metadata, connection)
         
-        # Validate the query and ensure it uses the 'review' column
-        if sql_query.startswith("Error:") or not validate_query(sql_query, connection):
-            continue  # Retry if the query is invalid or fails
+#         # Validate the query and ensure it uses the 'review' column
+#         if sql_query.startswith("Error:") or not validate_query(sql_query, connection):
+#             continue  # Retry if the query is invalid or fails
         
-        # Check if all keywords are present in the query
-        if not all(keyword.lower() in sql_query.lower() for keyword in keywords):
-            continue  # Retry if the query does not contain all keywords
+#         # Check if all keywords are present in the query
+#         if not all(keyword.lower() in sql_query.lower() for keyword in keywords):
+#             continue  # Retry if the query does not contain all keywords
         
-        # If valid and includes all keywords, print and break
-        print("\nGenerated Query:")
-        print(sql_query)
-        print("Summary:")
-        print(summary_text)
+#         # If valid and includes all keywords, print and break
+#         print("\nGenerated Query:")
+#         print(sql_query)
+#         print("Summary:")
+#         print(summary_text)
 
-        # Create a cursor and execute the query
-        cursor = connection.cursor()
-        cursor.execute(sql_query)
+#         # Create a cursor and execute the query
+#         cursor = connection.cursor()
+#         cursor.execute(sql_query)
         
-        # Fetch and print the query result in tabular format
-        result = cursor.fetchall()  # Fetch all rows
-        column_names = [desc[0] for desc in cursor.description]  # Get column names
+#         # Fetch and print the query result in tabular format
+#         result = cursor.fetchall()  # Fetch all rows
+#         column_names = [desc[0] for desc in cursor.description]  # Get column names
         
-        print("Output:")
-        # Print the result in a tabular format using tabulate
-        print(tabulate(result, headers=column_names, tablefmt="pretty"))
-        break
+#         print("Output:")
+#         # Print the result in a tabular format using tabulate
+#         print(tabulate(result, headers=column_names, tablefmt="pretty"))
+#         break
 
 
 

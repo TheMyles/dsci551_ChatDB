@@ -105,7 +105,7 @@ def sql_csv_upload(user_input, login_info):
     endpoint = login_info['endpoint']
     username = login_info['username']
     password = login_info['password']
-    database_name = login_info['database_name']
+    database_name = login_info['sql_database_name']
     port = 3306 
 
     connection = pymysql.connect(
@@ -191,7 +191,7 @@ def execute_sql_file(user_input, login_info):
     endpoint = login_info['endpoint']
     username = login_info['username']
     password = login_info['password']
-    database_name = login_info['database_name']
+    database_name = login_info['sql_database_name']
 
     file_path = None
     for i in user_input.split():
@@ -244,7 +244,7 @@ def show_sql_table(n_rows, table, login_info):
             host=login_info['endpoint'],
             user=login_info['username'],
             password=login_info['password'],
-            db=login_info['database_name']
+            db=login_info['sql_database_name']
         )
         cursor = connection.cursor()
 
