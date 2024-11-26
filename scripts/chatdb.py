@@ -62,12 +62,12 @@ connection = pymysql.connect(
     database=login_info['sql_database_name']
 )
 
-mongo_username = login_info['mongo_username']
-mongo_password = login_info['mongo_password']
-database_name = login_info['mongo_database_name']
-connection_string = f"mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/"
-client = pymongo.MongoClient(connection_string)
-db = client[database_name]
+# mongo_username = login_info['mongo_username']
+# mongo_password = login_info['mongo_password']
+# database_name = login_info['mongo_database_name']
+# connection_string = f"mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/"
+# client = pymongo.MongoClient(connection_string)
+# db = client[database_name]
 
 memory = []
 
@@ -124,7 +124,7 @@ def chatdb():
                 metadata = get_mongodb_metadata(login_info)
 
                 keywords_with_aggregates = find_keywords_for_examples(keywords, user_input)
-                display_mongo_queries(metadata, client, database_name, keywords_with_aggregates)
+                display_mongo_queries(metadata, login_info, keywords_with_aggregates)
             else:
                 print("Please specify either SQL or MONGODB in your request for examples.")
 

@@ -307,7 +307,18 @@ def validate_mongo_query(query, client, database_name):
 
 
 # Function to display and execute queries in MongoDB
-def display_mongo_queries(metadata, client, database_name, keywords_without_example):
+def display_mongo_queries(metadata, login_info, keywords_without_example):
+    # MongoDB credentials and connection string
+    mongo_username = login_info['mongo_username']
+    mongo_password = login_info['mongo_password']
+    database_name = login_info['mongo_database_name']
+
+    connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
+
+    # Connect to MongoDB
+    client = pymongo.MongoClient(connection_string)
+    db = client[database_name]
+    
     # List to store the generated queries
     queries_list = []
 
