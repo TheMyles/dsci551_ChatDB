@@ -96,7 +96,10 @@ def execute_sql_query(user_input, keywords, login_info):
     from_in_query = False
 
     if 'SELECT' in keywords:
-        query += 'SELECT ' + ', '.join(assoc_cols) + ' '
+        if '*' in assoc_cols:
+            query += 'SELECT * '
+        else:
+            query += 'SELECT ' + ', '.join(assoc_cols) + ' '
     
     elif 'AGGREGATE' in keywords:
         processes = []

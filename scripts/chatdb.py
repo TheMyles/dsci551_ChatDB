@@ -37,25 +37,25 @@ Functions in secondary py files
     Generating queries] * 2 
 """
 
-# login_info = {
-#     'endpoint': "localhost",
-#     'username': "root",
-#     'password': "MySQLDBP455",
-#     'sql_database_name': "chatdb",
-#     'mongo_username': 'mdmolnar',
-#     'mongo_password': 'AtM0nG0d1452',
-#     'mongo_database_name': "ChatDB",
-# }
-
 login_info = {
     'endpoint': "localhost",
     'username': "root",
-    'password': "Bobo8128!",
+    'password': "MySQLDBP455",
     'sql_database_name': "chatdb",
     'mongo_username': 'mdmolnar',
     'mongo_password': 'AtM0nG0d1452',
     'mongo_database_name': "ChatDB",
 }
+
+# login_info = {
+#     'endpoint': "localhost",
+#     'username': "root",
+#     'password': "Bobo8128!",
+#     'sql_database_name': "chatdb",
+#     'mongo_username': 'mdmolnar',
+#     'mongo_password': 'AtM0nG0d1452',
+#     'mongo_database_name': "ChatDB",
+# }
 
 connection = pymysql.connect(
     host=login_info['endpoint'],
