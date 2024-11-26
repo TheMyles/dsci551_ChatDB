@@ -34,13 +34,8 @@ Functions in secondary py files
 login_info = {
     'endpoint': "localhost",
     'username': "root",
-<<<<<<< Updated upstream
-    'password': "MySQLDBP455",
-    'sql_database_name': "chatdb",
-=======
     'password': "Bobo8128!",
     'database_name': "chatdb",
->>>>>>> Stashed changes
     'mongo_username': 'mdmolnar',
     'mongo_password': 'AtM0nG0d1452',
     'mongo_database_name': "ChatDB",
