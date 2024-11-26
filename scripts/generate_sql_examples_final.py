@@ -1,6 +1,8 @@
 import pymysql
 import pymongo
 from decimal import Decimal
+import tabulate
+from tabulate import tabulate
 
 def get_mysql_metadata(login_info):
     metadata = {}
@@ -259,3 +261,163 @@ def validate_query(query, connection):
         return bool(results)  # Return True if results exist, False otherwise
     except pymysql.Error:
         return False
+    
+
+def find_keywords_for_examples(keywords, user_input):
+    keywords_without_example = [keyword for keyword in keywords if keyword != "EXAMPLE"]
+    # List of words associated with 'AGGREGATE'
+    aggregate_keywords = ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
+                "min", "max", "avg", "median", "aggregate", "statistics", "metrics"]
+    keywords_with_aggregates = keywords_without_example
+    # Check if 'AGGREGATE' is in the keywords list
+    if "AGGREGATE" in keywords_without_example:
+        # Search for each word in the user_input and add to keywords_with_aggregate if found
+        for word in aggregate_keywords:
+            if word.lower() in user_input.lower():  # Case insensitive search
+                keywords_with_aggregates.append(word)
+    if "AGGREGATE" in keywords_with_aggregates:
+        keywords_with_aggregates.remove("AGGREGATE")
+    
+    return keywords_with_aggregates
+
+
+
+# def display_queries(metadata, connection, keywords_without_example):
+#     # List to store the generated queries
+#     queries_list = []
+
+#     # Generate and print 5 queries at a time
+#     for _ in range(5):
+#         while True:
+#             sql_query, summary_text = generate_sql_query(metadata, connection)
+
+#             # Validate the query and ensure it uses the 'review' column
+#             if sql_query.startswith("Error:") or not validate_query(sql_query, connection):
+#                 continue  # Retry if the query is invalid or fails
+
+#             # Check if all keywords are present in the query
+#             if not all(keyword.lower() in sql_query.lower() for keyword in keywords_without_example):
+#                 continue  # Retry if the query does not contain all keywords
+
+#             # Store the valid query and its summary in the list
+#             queries_list.append((sql_query, summary_text))
+
+#             # Print the generated query and summary
+#             print("\nGenerated Query:")
+#             print(sql_query)
+#             print("Summary:")
+#             print(summary_text)
+
+#             break  # Exit the while loop once a valid query is found
+
+#     return queries_list
+
+def display_queries(metadata, connection, keywords_without_example):
+    # List to store the generated queries
+    queries_list = []
+
+    # Generate and print 5 queries at a time
+    for _ in range(5):
+        while True:
+            sql_query, summary_text = generate_sql_query(metadata, connection)
+
+            # Validate the query and ensure it uses the 'review' column
+            if sql_query.startswith("Error:") or not validate_query(sql_query, connection):
+                continue  # Retry if the query is invalid or fails
+
+            # Check if all keywords are present in the query
+            if not all(keyword.lower() in sql_query.lower() for keyword in keywords_without_example):
+                continue  # Retry if the query does not contain all keywords
+
+            # Store the valid query and its summary in the list
+            queries_list.append((sql_query, summary_text))
+
+            # Print the generated query and summary
+            print("\nGenerated Query:")
+            print(sql_query)
+            print("Summary:")
+            print(summary_text)
+
+            break  # Exit the while loop once a valid query is found
+
+    # Print the queries list and prompt the user to select a query
+    print("\nSelect a query to run (1-5):")
+    for i, (query, summary) in enumerate(queries_list, 1):
+        print(f"{i}. {summary}")  # Print the summary for each query
+
+    # Get the user's choice
+    user_choice = int(input("Enter the number of the query you want to run: ")) - 1  # Adjust for 0-based index
+
+    # Ensure the choice is valid
+    if 0 <= user_choice < len(queries_list):
+        selected_query, selected_summary = queries_list[user_choice]
+        # Execute the selected query
+        execute_queries(selected_query, connection)
+    else:
+        print("Invalid choice. Please select a number between 1 and 5.")
+
+def execute_queries(query, connection):
+    # Create a cursor and execute the query
+    cursor = connection.cursor()
+    cursor.execute(query)
+
+    # Fetch and print the query result in tabular format
+    result = cursor.fetchall()  # Fetch all rows
+    column_names = [desc[0] for desc in cursor.description]  # Get column names
+
+    # Print the result in tabular format using tabulate
+    print("Output:")
+    print(tabulate(result, headers=column_names, tablefmt="pretty"))
+
+
+
+            #     keywords_without_example = [keyword for keyword in keywords if keyword != "EXAMPLE"]
+            # print(keywords_without_example)
+
+            # # List of words associated with 'AGGREGATE'
+            # aggregate_keywords = ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
+            #           "min", "max", "avg", "median", "aggregate", "statistics", "metrics"]
+            # keywords_with_aggregates = keywords_without_example
+            # # Check if 'AGGREGATE' is in the keywords list
+            # if "AGGREGATE" in keywords_without_example:
+            #     # Search for each word in the user_input and add to keywords_with_aggregate if found
+            #     for word in aggregate_keywords:
+            #         if word.lower() in user_input.lower():  # Case insensitive search
+            #             keywords_with_aggregates.append(word)
+            
+            # if "AGGREGATE" in keywords_with_aggregates:
+            #     keywords_with_aggregates.remove("AGGREGATE")
+
+            # print(keywords_with_aggregates)
+            
+            # # Generate and print 5 queries at a time
+            # for _ in range(5):
+            #     while True:
+            #         sql_query, summary_text = generate_sql_query(metadata, connection)
+                    
+            #         # Validate the query and ensure it uses the 'review' column
+            #         if sql_query.startswith("Error:") or not validate_query(sql_query, connection):
+            #             continue  # Retry if the query is invalid or fails
+                    
+            #         # Check if all keywords are present in the query
+            #         if not all(keyword.lower() in sql_query.lower() for keyword in keywords_without_example):
+            #             continue  # Retry if the query does not contain all keywords
+                    
+            #         # If valid and includes all keywords, print and break
+            #         print("\nGenerated Query:")
+            #         print(sql_query)
+            #         print("Summary:")
+            #         print(summary_text)
+
+            #         # # Create a cursor and execute the query
+            #         # cursor = connection.cursor()
+            #         # cursor.execute(sql_query)
+                    
+            # #         # # Fetch and print the query result in tabular format
+            # #         # result = cursor.fetchall()  # Fetch all rows
+            # #         # column_names = [desc[0] for desc in cursor.description]  # Get column names
+                    
+            # #         # print("Output:")
+            # #         # # Print the result in a tabular format using tabulate
+            # #         # print(tabulate(result, headers=column_names, tablefmt="pretty"))
+            #         break
