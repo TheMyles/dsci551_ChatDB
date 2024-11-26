@@ -1,4 +1,4 @@
-from examples_testing import get_mysql_metadata
+from generate_sql_examples_final import get_mysql_metadata
 import numpy as np
 from mongo_examples_testing import get_mongodb_metadata
 import pymysql

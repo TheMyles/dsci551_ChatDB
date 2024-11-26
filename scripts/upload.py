@@ -28,7 +28,7 @@ def mongo_upload(user_input, login_info):
     try:
         # Connect to MongoDB
         client = pymongo.MongoClient(connection_string)
-        db = client["ChatDB"]
+        db = client[login_info['mongo_database_name']]
 
         # Check if the collection exists
         if table_name not in db.list_collection_names():
@@ -292,7 +292,7 @@ def show_collection(n_docs, collection_name, login_info):
 
         # Establish a MongoDB connection
         client = pymongo.MongoClient(connection_string)
-        db = client['ChatDB']
+        db = client[login_info['mongo_database_name']]
         collection = db[collection_name]
 
         # Fetch the documents
