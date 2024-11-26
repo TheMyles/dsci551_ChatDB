@@ -28,7 +28,7 @@ where_words = {
                      'does not equal', 'unequal', 'not identical', '!=']
 }
 
-order_words = ["order by", "sort", "sort by", "ordered", "order", "ascending", "descending", "rank", "arrange", "prioritize",
+order_words = ["order by", "sort", "sort by", "ordered", "order", "rank", "arrange", "prioritize",
                "sequence", "order", "hierarchy", "top", "bottom", "sorted", 'biggest', 'smallest']
 
 desc_words = ['descending', 'desc', 'biggest to smallest', 'reverse', 'biggest']
@@ -38,7 +38,8 @@ all_cols = ['all columns', 'every column', 'each column', 'all the columns', 'al
 
 
 def execute_sql_query(user_input, keywords, login_info):
-    user_list = user_input.translate(str.maketrans('', '', string.punctuation.replace('_', ''))).split()
+    exclude = string.punctuation.translate(str.maketrans('', '', "_()"))
+    user_list = user_input.translate(str.maketrans('', '', exclude)).split()
     
     mdata = get_mysql_metadata(login_info)
 
@@ -341,7 +342,8 @@ def sql_or_nosql(user_input, login_info):
 
 
 def execute_mongo_query(user_input, keywords, login_info):
-    user_list = user_input.translate(str.maketrans('', '', string.punctuation.replace('_', ''))).split()
+    exclude = string.punctuation.translate(str.maketrans('', '', "_()"))
+    user_list = user_input.translate(str.maketrans('', '', exclude)).split()
 
     # Connect to MongoDB
     # connection_string = f'mongodb+srv://{login_info['mongo_username']}:{login_info['mongo_password']}@cluster0.tgu2d.mongodb.net/'

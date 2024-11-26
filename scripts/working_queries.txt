@@ -12,6 +12,9 @@ query = SELECT review, COUNT(*) FROM generalinfo GROUP BY review;
 user_input = 'show me average p_id, maximum p_id, minimum p_id, and count of all rows from person grouped by hasPosition'
 query = SELECT hasPosition, MIN(p_id), MAX(p_id), AVG(p_id), COUNT(*) FROM person GROUP BY hasPosition;
 
+user_input = 'show me the biggest 5 food types by average review of restaurants from each food_type in generalinfo rank them by AVG(review)'
+query = SELECT food_type, AVG(review) FROM generalinfo GROUP BY food_type ORDER BY AVG(review) DESC LIMIT 5;
+
 // MongoDB
 user_input = 'Show me all of the columns and only 5 rows where hasPosition is equal to Faculty from UW_std_person'
 pipeline = [{'$match': {'hasPosition': 'Faculty'}}, {'$project': {'_id': 0}}, {'$limit': 5}]
