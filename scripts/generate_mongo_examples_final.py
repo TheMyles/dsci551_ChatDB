@@ -1,4 +1,5 @@
 import pymongo
+import tabulate
 
 def get_mongodb_metadata(login_info):
     metadata = {}
@@ -255,6 +256,8 @@ def generate_mongodb_query(metadata, client):
 def find_keywords_for_examples_mongo(keywords, user_input):
     keywords_without_example = [keyword for keyword in keywords if keyword != "EXAMPLE"]
     keywords_without_example.remove("MONGODB")
+    if "SELECT" in keywords_without_example:
+        keywords_without_example.remove("SELECT")
     # List of words associated with 'AGGREGATE'
     aggregate_keywords = ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
                 "min", "max", "avg", "median", "aggregate", "statistics", "metrics"]
@@ -271,153 +274,421 @@ def find_keywords_for_examples_mongo(keywords, user_input):
     return keywords_with_aggregates
 
 
+# import pymongo
+# from pymongo.errors import PyMongoError
+# from tabulate import tabulate
+
+# def validate_mongo_query(query, db):
+#     try:
+#         # Check if the query is a string and evaluate it into a dictionary
+#         if isinstance(query, str):
+#             query = eval(query)
+
+#         # Handle "find" queries
+#         if "find" in query:
+#             collection_name = query["find"]
+#             filter_condition = query.get("filter", {})
+#             projection = query.get("projection", None)
+#             limit = query.get("limit", 15)  # Default limit to 15 if not provided
+
+#             # Ensure limit is an integer
+#             if not isinstance(limit, int):
+#                 limit = int(limit)  # Attempt to convert to integer, or raise an error
+
+#             # Execute the query
+#             cursor = db[collection_name].find(filter_condition, projection).limit(limit)
+#             results = list(cursor)  # Fetch results as a list
+#             return bool(results)  # Return True if results are non-empty, False otherwise
+
+#         # Handle "aggregate" queries
+#         elif "aggregate" in query:
+#             collection_name = query["aggregate"]
+#             pipeline = query.get("pipeline", [])
+
+#             # Add a $limit stage to the pipeline if it doesn't already exist
+#             if not any("$limit" in stage for stage in pipeline):
+#                 pipeline.append({"$limit": 15})
+
+#             # Execute the aggregation pipeline
+#             cursor = db[collection_name].aggregate(pipeline)
+#             results = list(cursor)  # Fetch results as a list
+#             return bool(results)  # Return True if results are non-empty, False otherwise
+
+#         # Unsupported query type
+#         else:
+#             print("Unsupported query type.")
+#             return False
+
+#     except Exception as e:
+#         print(f"Error during query validation: {e}")
+#         return False
+
+
+# # Function to display and execute queries in MongoDB
+# def display_mongo_queries(metadata, login_info, keywords_without_example):
+#     # MongoDB credentials and connection string
+#     mongo_username = login_info['mongo_username']
+#     mongo_password = login_info['mongo_password']
+#     database_name = login_info['mongo_database_name']
+
+#     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
+
+#     # Connect to MongoDB
+#     client = pymongo.MongoClient(connection_string)
+#     db = client[database_name]
+    
+#     # List to store the generated queries
+#     queries_list = []
+
+#     # Generate and print 5 queries at a time
+#     for _ in range(5):
+#         while True:
+#             mongo_query, summary_text = generate_mongodb_query(metadata, client)
+
+#             # Validate the query
+#             if mongo_query.startswith("Error:") or not validate_mongo_query(mongo_query, db):
+#                 continue  # Retry if the query is invalid or fails
+
+#             # Check if all keywords are present in the query
+#             if not all(keyword.lower() in str(mongo_query).lower() for keyword in keywords_without_example):
+#                 continue  # Retry if the query does not contain all keywords
+
+#             # Store the valid query and its summary in the list
+#             queries_list.append((mongo_query, summary_text))
+
+#             # Print the generated query and summary
+#             print("\nGenerated Query:")
+#             print(mongo_query)
+#             print("Summary:")
+#             print(summary_text)
+
+#             break  # Exit the while loop once a valid query is found
+
+#     # Print the queries list and prompt the user to select a query
+#     print("\nSelect a query to run (1-5):")
+#     for i, (query, summary) in enumerate(queries_list, 1):
+#         print(f"{i}. {summary}")  # Print the summary for each query
+
+#     # Get the user's choice
+#     user_choice = int(input("Enter the number of the query you want to run: ")) - 1  # Adjust for 0-based index
+
+#     # Ensure the choice is valid
+#     if 0 <= user_choice < len(queries_list):
+#         selected_query, selected_summary = queries_list[user_choice]
+#         # Execute the selected query
+#         execute_mongo_query(selected_query, client, database_name)
+#     else:
+#         print("Invalid choice. Please select a number between 1 and 5.")
+
+
+# # Function to execute MongoDB queries
+# def execute_mongo_query(query, client, database_name):
+#     try:
+#         if "find" in query:
+#             collection_name = query["find"]
+#             filter_query = query.get("filter", {})
+#             limit = query.get("limit", 0)
+#             sort = query.get("sort", [])
+
+#             # Execute the query
+#             collection = client[database_name][collection_name]
+#             results = list(collection.find(filter_query).sort(sort).limit(limit))
+#             if results:
+#                 # Print the results in tabular format using tabulate
+#                 print("Output:")
+#                 print(tabulate(results, headers="keys", tablefmt="pretty"))
+#             else:
+#                 print("No results found.")
+
+#         elif "aggregate" in query:
+#             collection_name = query["aggregate"]
+#             pipeline = query.get("pipeline", [])
+
+#             # Execute the aggregation pipeline
+#             collection = client[database_name][collection_name]
+#             results = list(collection.aggregate(pipeline))
+#             if results:
+#                 # Print the results in tabular format using tabulate
+#                 print("Output:")
+#                 print(tabulate(results, headers="keys", tablefmt="pretty"))
+#             else:
+#                 print("No results found.")
+
+#         else:
+#             print("Unsupported query type.")
+
+#     except PyMongoError as e:
+#         print(f"Error executing MongoDB query: {e}")
+
+
+
+# import pymongo
+# from tabulate import tabulate
+# import random
+
+
+# def display_mongo_queries(metadata, login_info, keywords_without_example):
+#     # MongoDB credentials and connection string
+#     mongo_username = login_info['mongo_username']
+#     mongo_password = login_info['mongo_password']
+#     database_name = login_info['mongo_database_name']
+#     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.mongodb.net/'
+
+#     # Connect to MongoDB
+#     client = pymongo.MongoClient(connection_string)
+#     db = client[database_name]
+
+#     # List to store the generated queries
+#     queries_list = []
+
+#     # Generate and print 5 queries at a time
+#     for _ in range(5):
+#         while True:
+#             mongo_query, summary_text = generate_mongodb_query(metadata, db)
+
+#             # Check if all keywords are present in the query
+#             if mongo_query.startswith("Error:"):
+#                 continue  # Retry if the query is invalid or fails
+#             if not all(keyword.lower() in str(mongo_query).lower() for keyword in keywords_without_example):
+#                 continue  # Retry if the query does not contain all keywords
+
+#             # Store the valid query and its summary in the list
+#             queries_list.append((mongo_query, summary_text))
+
+#             # Print the generated query and summary
+#             print("\nGenerated Query:")
+#             print(mongo_query)
+#             print("Summary:")
+#             print(summary_text)
+
+#             break  # Exit the while loop once a valid query is found
+
+#     # Print the queries list and prompt the user to select a query
+#     print("\nSelect a query to run (1-5):")
+#     for i, (_, summary) in enumerate(queries_list, 1):
+#         print(f"{i}. {summary}")  # Print the summary for each query
+
+#     # Get the user's choice
+#     user_choice = int(input("Enter the number of the query you want to run: ")) - 1  # Adjust for 0-based index
+
+#     # Ensure the choice is valid
+#     if 0 <= user_choice < len(queries_list):
+#         selected_query, selected_summary = queries_list[user_choice]
+#         # Execute the selected query
+#         execute_mongodb_query(selected_query, login_info)
+#     else:
+#         print("Invalid choice. Please select a number between 1 and 5.")
+
+#     client.close()  # Close the connection
+
+
+# def execute_mongodb_query(query, login_info):
+#     # MongoDB credentials and connection string
+#     mongo_username = login_info['mongo_username']
+#     mongo_password = login_info['mongo_password']
+#     database_name = login_info['mongo_database_name']
+#     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.mongodb.net/'
+
+#     # Connect to MongoDB
+#     client = pymongo.MongoClient(connection_string)
+#     db = client[database_name]
+#     collection = db[query.get('find') if 'find' in query else query.get('aggregate')]
+
+#     if 'find' in query:
+#         filter_ = query.get('filter', {})
+#         sort = query.get('sort', None)
+#         limit = query.get('limit', None)
+
+#         cursor = collection.find(filter_)
+#         if sort:
+#             cursor = cursor.sort(sort)
+#         if limit:
+#             cursor = cursor.limit(limit)
+
+#         # Fetch and display results
+#         results = list(cursor)
+#     elif 'aggregate' in query:
+#         pipeline = query['pipeline']
+#         results = list(collection.aggregate(pipeline))
+#     else:
+#         results = []
+
+#     # Display results
+#     if results:
+#         print("Output:")
+#         print(tabulate(results, headers="keys", tablefmt="pretty"))
+#     else:
+#         print("No results found.")
+
+#     client.close()  # Close the connection
+
+# import pymongo
+# import random
+# from bson.json_util import dumps
+
+
+# def generate_and_execute_mongo_queries_with_keywords(metadata, login_info, keywords_without_example):
+#     """
+#     Generate 5 MongoDB queries, check for required keywords, display their summaries,
+#     and allow the user to choose one to execute.
+
+#     Parameters:
+#     metadata: dict - Metadata of MongoDB collections and fields.
+#     login_info: dict - Connection details for MongoDB.
+#     keywords_without_example: list - List of keywords that must appear in the query.
+#     """
+#     # MongoDB credentials and connection string
+#     mongo_username = login_info['mongo_username']
+#     mongo_password = login_info['mongo_password']
+#     database_name = login_info['mongo_database_name']
+#     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
+
+#     # Connect to MongoDB
+#     client = pymongo.MongoClient(connection_string)
+#     db = client[database_name]
+
+#     def execute_mongodb_query(query, db):
+#         try:
+#             if "find" in query:
+#                 collection_name = query["find"]
+#                 filter_condition = query.get("filter", {})
+#                 projection = query.get("projection", None)
+#                 cursor = db[collection_name].find(filter_condition, projection).limit(15)  # Limit results to 15
+#                 return list(cursor)  # Return the query result as a list
+#             elif "aggregate" in query:
+#                 collection_name = query["aggregate"]
+#                 pipeline = query.get("pipeline", [])
+#                 # Add a $limit stage to the aggregation pipeline if it doesn't already exist
+#                 if not any(stage.get("$limit") for stage in pipeline):
+#                     pipeline.append({"$limit": 15})
+#                 cursor = db[collection_name].aggregate(pipeline)
+#                 return list(cursor)  # Return the query result as a list
+#             else:
+#                 raise ValueError("Unsupported query type.")
+#         except Exception as e:
+#             return f"Error: {str(e)}"
+
+#     results = []
+
+#     while len(results) < 5:  # Ensure we collect 5 queries with non-empty results
+#         query, summary = generate_mongodb_query(metadata, db)
+#         # print("\nGenerated Query:")
+#         # print(query)
+#         # Check if all keywords are present in the query
+#         if not all(keyword.lower() in str(query).lower() for keyword in keywords_without_example):
+
+#             continue  # Retry if the query does not contain all keywords
+#         else:
+#             print(query)
+#         if query.startswith("Error:"):
+#             continue  # Generate a new query if there's an error
+#         result = execute_mongodb_query(eval(query), db)
+#         if isinstance(result, str) and result.startswith("Error:"):
+#             continue  # Generate a new query if execution fails
+#         if not result:
+#             continue  # Skip queries that return an empty result set
+#         results.append({"query": query, "summary": summary, "output": result})
+
+#     # Display the generated queries
+#     print("\nGenerated Queries:")
+#     for idx, res in enumerate(results):
+#         print(f"{idx + 1}. {res['summary']}")
+
+#     # Prompt the user to choose a query
+#     user_choice = int(input("\nEnter the number of the query you want to run (1-5): ")) - 1
+
+#     # Validate the choice and execute the query
+#     if 0 <= user_choice < len(results):
+#         chosen_query = results[user_choice]
+#         print("\nExecuting the chosen query:")
+#         print(dumps(chosen_query["query"], indent=2))
+#         print("\nQuery Results:")
+#         print(dumps(chosen_query["output"], indent=2))
+#     else:
+#         print("Invalid choice. Please select a number between 1 and 5.")
+
+#     client.close()  # Close the MongoDB connection
+
+
 import pymongo
-from pymongo.errors import PyMongoError
-from tabulate import tabulate
+from bson.json_util import dumps
 
+def generate_and_display_queries(login_info, metadata, keywords_without_example):
+    """
+    Generate 5 MongoDB queries, display their summaries, and allow the user to choose one to execute.
 
-def validate_mongo_query(query, db):
-    try:
-        # Check if the query is a string and evaluate it into a dictionary
-        if isinstance(query, str):
-            query = eval(query)
-
-        # Handle "find" queries
-        if "find" in query:
-            collection_name = query["find"]
-            filter_condition = query.get("filter", {})
-            projection = query.get("projection", None)
-            limit = query.get("limit", 15)  # Default limit to 15 if not provided
-
-            # Ensure limit is an integer
-            if not isinstance(limit, int):
-                limit = int(limit)  # Attempt to convert to integer, or raise an error
-
-            # Execute the query
-            cursor = db[collection_name].find(filter_condition, projection).limit(limit)
-            results = list(cursor)  # Fetch results as a list
-            return bool(results)  # Return True if results are non-empty, False otherwise
-
-        # Handle "aggregate" queries
-        elif "aggregate" in query:
-            collection_name = query["aggregate"]
-            pipeline = query.get("pipeline", [])
-
-            # Add a $limit stage to the pipeline if it doesn't already exist
-            if not any("$limit" in stage for stage in pipeline):
-                pipeline.append({"$limit": 15})
-
-            # Execute the aggregation pipeline
-            cursor = db[collection_name].aggregate(pipeline)
-            results = list(cursor)  # Fetch results as a list
-            return bool(results)  # Return True if results are non-empty, False otherwise
-
-        # Unsupported query type
-        else:
-            print("Unsupported query type.")
-            return False
-
-    except Exception as e:
-        print(f"Error during query validation: {e}")
-        return False
-
-
-
-
-
-
-# Function to display and execute queries in MongoDB
-def display_mongo_queries(metadata, login_info, keywords_without_example):
+    Parameters:
+    login_info: dict - MongoDB connection details.
+    metadata: dict - Metadata of MongoDB collections and fields.
+    """
     # MongoDB credentials and connection string
     mongo_username = login_info['mongo_username']
     mongo_password = login_info['mongo_password']
     database_name = login_info['mongo_database_name']
-
     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
 
     # Connect to MongoDB
     client = pymongo.MongoClient(connection_string)
     db = client[database_name]
-    
-    # List to store the generated queries
-    queries_list = []
 
-    # Generate and print 5 queries at a time
-    for _ in range(5):
-        while True:
-            mongo_query, summary_text = generate_mongodb_query(metadata, client)
+    # Function to execute MongoDB queries
+    def execute_mongodb_query(query, db):
+        try:
+            if "find" in query:
+                collection_name = query["find"]
+                filter_condition = query.get("filter", {})
+                projection = query.get("projection", None)
+                cursor = db[collection_name].find(filter_condition, projection).limit(15)
+                return list(cursor)
+            elif "aggregate" in query:
+                collection_name = query["aggregate"]
+                pipeline = query.get("pipeline", [])
+                if not any(stage.get("$limit") for stage in pipeline):
+                    pipeline.append({"$limit": 15})
+                cursor = db[collection_name].aggregate(pipeline)
+                return list(cursor)
+            else:
+                raise ValueError("Unsupported query type.")
+        except Exception as e:
+            return f"Error: {str(e)}"
 
-            # Validate the query
-            if mongo_query.startswith("Error:") or not validate_mongo_query(mongo_query, db):
-                continue  # Retry if the query is invalid or fails
+    # Generate, execute, and collect 5 MongoDB queries with results
+    results = []
+    exclusion_words = ['$ne']
+    while len(results) < 5:  # Ensure 5 queries with non-empty results
+        query, summary = generate_mongodb_query(metadata, client)
+        if any(exclusion_word.lower() in query.lower() for exclusion_word in exclusion_words):
+            continue
+        # Check if all keywords are present in the query
+        if not all(keyword.lower() in str(query).lower() for keyword in keywords_without_example):
+            continue  # Retry if the query does not contain all keywords
+        if query.startswith("Error:"):
+            continue
+        result = execute_mongodb_query(eval(query), db)
+        if isinstance(result, str) and result.startswith("Error:"):
+            continue
+        if not result:
+            continue
+        results.append({"query": query, "summary": summary, "output": result})
 
-            # Check if all keywords are present in the query
-            if not all(keyword.lower() in str(mongo_query).lower() for keyword in keywords_without_example):
-                continue  # Retry if the query does not contain all keywords
+    # Display query summaries for user selection
+    print("\nGenerated Queries:")
+    for idx, res in enumerate(results):
+        print(f"{idx + 1}. {res['summary']}")
 
-            # Store the valid query and its summary in the list
-            queries_list.append((mongo_query, summary_text))
+    # Prompt user to choose a query
+    user_choice = int(input("\nEnter the number of the query you want to view the output for (1-5): ")) - 1
 
-            # Print the generated query and summary
-            print("\nGenerated Query:")
-            print(mongo_query)
-            print("Summary:")
-            print(summary_text)
-
-            break  # Exit the while loop once a valid query is found
-
-    # Print the queries list and prompt the user to select a query
-    print("\nSelect a query to run (1-5):")
-    for i, (query, summary) in enumerate(queries_list, 1):
-        print(f"{i}. {summary}")  # Print the summary for each query
-
-    # Get the user's choice
-    user_choice = int(input("Enter the number of the query you want to run: ")) - 1  # Adjust for 0-based index
-
-    # Ensure the choice is valid
-    if 0 <= user_choice < len(queries_list):
-        selected_query, selected_summary = queries_list[user_choice]
-        # Execute the selected query
-        execute_mongo_query(selected_query, client, database_name)
+    # Validate choice and display output
+    if 0 <= user_choice < len(results):
+        chosen_result = results[user_choice]
+        print("\nSelected Query:")
+        print(chosen_result["query"])
+        print("\nSummary:")
+        print(chosen_result["summary"])
+        print("\nOutput:")
+        print(dumps(chosen_result["output"], indent=4))
     else:
         print("Invalid choice. Please select a number between 1 and 5.")
 
-
-# Function to execute MongoDB queries
-def execute_mongo_query(query, client, database_name):
-    try:
-        if "find" in query:
-            collection_name = query["find"]
-            filter_query = query.get("filter", {})
-            limit = query.get("limit", 0)
-            sort = query.get("sort", [])
-
-            # Execute the query
-            collection = client[database_name][collection_name]
-            results = list(collection.find(filter_query).sort(sort).limit(limit))
-            if results:
-                # Print the results in tabular format using tabulate
-                print("Output:")
-                print(tabulate(results, headers="keys", tablefmt="pretty"))
-            else:
-                print("No results found.")
-
-        elif "aggregate" in query:
-            collection_name = query["aggregate"]
-            pipeline = query.get("pipeline", [])
-
-            # Execute the aggregation pipeline
-            collection = client[database_name][collection_name]
-            results = list(collection.aggregate(pipeline))
-            if results:
-                # Print the results in tabular format using tabulate
-                print("Output:")
-                print(tabulate(results, headers="keys", tablefmt="pretty"))
-            else:
-                print("No results found.")
-
-        else:
-            print("Unsupported query type.")
-
-    except PyMongoError as e:
-        print(f"Error executing MongoDB query: {e}")
+    client.close()  # Close the MongoDB connection

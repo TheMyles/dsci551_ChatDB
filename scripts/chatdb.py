@@ -15,10 +15,12 @@ from generate_sql_examples_final import display_join_queries
 
 from generate_mongo_examples_final import get_mongodb_metadata
 from generate_mongo_examples_final import generate_mongodb_query
-from generate_mongo_examples_final import validate_mongo_query
+# from generate_mongo_examples_final import validate_mongo_query
 from generate_mongo_examples_final import find_keywords_for_examples_mongo
-from generate_mongo_examples_final import display_mongo_queries
-from generate_mongo_examples_final import execute_mongo_query
+# from generate_mongo_examples_final import display_mongo_queries
+# from generate_mongo_examples_final import generate_and_execute_mongo_queries_with_keywords
+# from generate_mongo_examples_final import execute_mongo_query
+from generate_mongo_examples_final import generate_and_display_queries
 
 from data_exploration import explore_data
 
@@ -124,7 +126,11 @@ def chatdb():
                 metadata = get_mongodb_metadata(login_info)
 
                 keywords_with_aggregates = find_keywords_for_examples_mongo(keywords, user_input)
-                display_mongo_queries(metadata, login_info, keywords_with_aggregates)
+                print(keywords_with_aggregates)
+                # display_mongo_queries(metadata, login_info, keywords_with_aggregates)
+                # generate_and_execute_mongo_queries_with_keywords(metadata, login_info, keywords_with_aggregates)
+                generate_and_display_queries(login_info, metadata, keywords_with_aggregates)
+
             else:
                 print("Please specify either SQL or MONGODB in your request for examples.")
 
