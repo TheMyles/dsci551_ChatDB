@@ -25,15 +25,15 @@ Functions in secondary py files
     Generating queries] * 2 
 """
 
-
-# login_info = {
-#     'endpoint': "localhost",
-#     'username': "root",
-#     'password': "MySQLDBP455",
-#     'database_name': "chatdb",
-#     'mongo_username': 'mdmolnar',
-#     'mongo_password': 'AtM0nG0d1452'
-# }
+login_info = {
+    'endpoint': "localhost",
+    'username': "root",
+    'password': "MySQLDBP455",
+    'sql_database_name': "chatdb",
+    'mongo_username': 'mdmolnar',
+    'mongo_password': 'AtM0nG0d1452',
+    'mongo_database_name': "ChatDB",
+}
 
 login_info = {
     'endpoint': "localhost",
@@ -90,17 +90,26 @@ def chatdb():
             
         elif 'EXAMPLE' in keywords:
             # print('example in keywds')
-            metadata = get_mysql_metadata(login_info)
+            if 'SQL' in keywords:
+                metadata = get_mysql_metadata(login_info)
 
-            keywords_with_aggregates = find_keywords_for_examples(keywords, user_input)
-            # print(keywords_with_aggregates)
+                keywords_with_aggregates = find_keywords_for_examples(keywords, user_input)
+                # print(keywords_with_aggregates)
 
-            display_queries(metadata, connection, keywords_with_aggregates)
+                display_queries(metadata, connection, keywords_with_aggregates)
+            elif 'MONGODB' in keywords:
+                pass
+            else:
+                print("Please specify")
 
         elif 'SELECT' in keywords or 'AGGREGATE' in keywords:
-
             if gen_queries.sql_or_nosql(user_input, login_info) == 'SQL':
+                print('Generating an SQL query...')
                 gen_queries.execute_sql_query(user_input, keywords, login_info)
+            elif gen_queries.sql_or_nosql(user_input, login_info) == 'MONGODB':
+                print('Generating a MongoDB query...')
+            else:
+                print('In your query, please specify which table/collection you would like to use.')
 
 
         print(reponse)
