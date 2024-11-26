@@ -258,6 +258,9 @@ def find_keywords_for_examples_mongo(keywords, user_input):
     keywords_without_example.remove("MONGODB")
     if "SELECT" in keywords_without_example:
         keywords_without_example.remove("SELECT")
+    if "WHERE" in keywords_without_example:
+        keywords_without_example.remove("WHERE")
+        keywords_without_example.append("MATCH")
     # List of words associated with 'AGGREGATE'
     aggregate_keywords = ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
                 "min", "max", "avg", "median", "aggregate", "statistics", "metrics"]
@@ -654,7 +657,8 @@ def generate_and_display_queries(login_info, metadata, keywords_without_example)
 
     # Generate, execute, and collect 5 MongoDB queries with results
     results = []
-    exclusion_words = ['$ne']
+    # exclusion_words = ['$ne']
+    exclusion_words = []
     while len(results) < 5:  # Ensure 5 queries with non-empty results
         query, summary = generate_mongodb_query(metadata, client)
         if any(exclusion_word.lower() in query.lower() for exclusion_word in exclusion_words):
@@ -671,10 +675,11 @@ def generate_and_display_queries(login_info, metadata, keywords_without_example)
             continue
         results.append({"query": query, "summary": summary, "output": result})
 
-    # Display query summaries for user selection
+    # Display query summaries and actual queries for user selection
     print("\nGenerated Queries:")
     for idx, res in enumerate(results):
-        print(f"{idx + 1}. {res['summary']}")
+        print(f"{idx + 1}. Summary: {res['summary']}")
+        print(f"   Query: {res['query']}\n")
 
     # Prompt user to choose a query
     user_choice = int(input("\nEnter the number of the query you want to view the output for (1-5): ")) - 1
