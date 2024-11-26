@@ -10,7 +10,7 @@ def get_mysql_metadata(login_info):
         host=login_info['endpoint'],
         user=login_info['username'],
         password=login_info['password'],
-        database=login_info['database_name']
+        database=login_info['sql_database_name']
     )
 
     cursor = connection.cursor()

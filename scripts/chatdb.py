@@ -35,7 +35,7 @@ login_info = {
     'endpoint': "localhost",
     'username': "root",
     'password': "Bobo8128!",
-    'database_name': "chatdb",
+    'sql_database_name': "chatdb",
     'mongo_username': 'mdmolnar',
     'mongo_password': 'AtM0nG0d1452',
     'mongo_database_name': "ChatDB",
