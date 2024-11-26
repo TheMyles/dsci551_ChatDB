@@ -100,7 +100,7 @@ def chatdb():
             elif 'MONGODB' in keywords:
                 pass
             else:
-                print("Please specify")
+                print("Please specify either SQL or MONGODB in your request.")
 
         elif 'SELECT' in keywords or 'AGGREGATE' in keywords:
             if gen_queries.sql_or_nosql(user_input, login_info) == 'SQL':

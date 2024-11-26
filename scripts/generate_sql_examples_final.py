@@ -265,6 +265,7 @@ def validate_query(query, connection):
 
 def find_keywords_for_examples(keywords, user_input):
     keywords_without_example = [keyword for keyword in keywords if keyword != "EXAMPLE"]
+    keywords_without_example.remove("SQL")
     # List of words associated with 'AGGREGATE'
     aggregate_keywords = ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
                 "min", "max", "avg", "median", "aggregate", "statistics", "metrics"]
