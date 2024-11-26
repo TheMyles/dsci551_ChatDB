@@ -6,7 +6,7 @@ def get_mongodb_metadata(login_info):
     # MongoDB credentials and connection string
     mongo_username = login_info['mongo_username']
     mongo_password = login_info['mongo_password']
-    database_name = login_info['database_name']
+    database_name = login_info['mongo_database_name']
 
     connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
 
@@ -787,10 +787,8 @@ import random
     
 #     return query, summary
 
-import random
-from pymongo import MongoClient
 
-def generate_mongodb_query(metadata, client):
+
     # Query templates grouped by type with summary placeholders
     # templates_with_summaries = [
     #     {
@@ -841,6 +839,11 @@ def generate_mongodb_query(metadata, client):
     #     }
     # ]
 
+
+import random
+from pymongo import MongoClient
+
+def generate_mongodb_query(metadata, client):
     templates_with_summaries = [
         # Generic find queries
         {
