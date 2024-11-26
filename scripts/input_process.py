@@ -10,7 +10,7 @@ QUERY_PATTERNS = {
                "display", "list", "view", "pick", "choose", "read", "query"],
     "AGGREGATE": ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
                   "min", "max", "avg", "median", "aggregate", "statistics", "metrics"],
-    "GROUP BY": ["group by", "aggregate", "group", "grouping", "each", "total", "categorize",
+    "GROUP BY": ["group by", "group", "grouping", "each", "total", "categorize",
                  "partition", "classify", "segment", "cluster", "bucket", 'grouped'],
     "HAVING": ["having", "condition", "filter", "over", "under", "less", "greater", "limit", 'more',
                "range", "restrict", "criteria", "threshold", "constraint", "above", "below"],
