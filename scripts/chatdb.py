@@ -13,7 +13,12 @@ from generate_sql_examples_final import display_queries
 from generate_sql_examples_final import execute_queries
 from generate_sql_examples_final import display_join_queries
 
-from mongo_examples_testing import get_mongodb_metadata
+from generate_mongo_examples_final import get_mongodb_metadata
+from generate_mongo_examples_final import generate_mongodb_query
+from generate_mongo_examples_final import validate_mongo_query
+from generate_mongo_examples_final import find_keywords_for_examples
+from generate_mongo_examples_final import display_mongo_queries
+from generate_mongo_examples_final import execute_mongo_query
 
 from data_exploration import explore_data
 
@@ -30,25 +35,25 @@ Functions in secondary py files
     Generating queries] * 2 
 """
 
-login_info = {
-    'endpoint': "localhost",
-    'username': "root",
-    'password': "MySQLDBP455",
-    'sql_database_name': "chatdb",
-    'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452',
-    'mongo_database_name': "ChatDB",
-}
-
 # login_info = {
 #     'endpoint': "localhost",
 #     'username': "root",
-#     'password': "Bobo8128!",
+#     'password': "MySQLDBP455",
 #     'sql_database_name': "chatdb",
 #     'mongo_username': 'mdmolnar',
 #     'mongo_password': 'AtM0nG0d1452',
 #     'mongo_database_name': "ChatDB",
 # }
+
+login_info = {
+    'endpoint': "localhost",
+    'username': "root",
+    'password': "Bobo8128!",
+    'sql_database_name': "chatdb",
+    'mongo_username': 'mdmolnar',
+    'mongo_password': 'AtM0nG0d1452',
+    'mongo_database_name': "ChatDB",
+}
 
 connection = pymysql.connect(
     host=login_info['endpoint'],
@@ -56,6 +61,13 @@ connection = pymysql.connect(
     password=login_info['password'],
     database=login_info['sql_database_name']
 )
+
+mongo_username = login_info['mongo_username']
+mongo_password = login_info['mongo_password']
+database_name = login_info['mongo_database_name']
+connection_string = f"mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/"
+client = pymongo.MongoClient(connection_string)
+db = client[database_name]
 
 memory = []
 
@@ -109,7 +121,10 @@ def chatdb():
                 else:
                     display_queries(metadata, connection, keywords_with_aggregates)
             elif 'MONGODB' in keywords:
-                pass
+                metadata = get_mongodb_metadata(login_info)
+
+                keywords_with_aggregates = find_keywords_for_examples(keywords, user_input)
+                display_mongo_queries(metadata, client, database_name, keywords_with_aggregates)
             else:
                 print("Please specify either SQL or MONGODB in your request for examples.")
 
