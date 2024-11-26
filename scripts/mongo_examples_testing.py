@@ -66,6 +66,7 @@ def get_mongodb_metadata(login_info):
     return metadata
 
 
+<<<<<<< Updated upstream
 # Example usage
 # login_info = {
 #     'endpoint': "localhost",
@@ -77,6 +78,20 @@ def get_mongodb_metadata(login_info):
 # }
 
 # metadata = get_mongodb_metadata(login_info)
+=======
+login_info = {
+    'endpoint': "localhost",
+    'username': "root",
+    'password': "Bobo8128!",
+    'sql_database_name': "chatdb",
+    'mongo_username': 'mdmolnar',
+    'mongo_password': 'AtM0nG0d1452',
+    'mongo_database_name': "ChatDB",
+}
+
+
+metadata = get_mongodb_metadata(login_info)
+>>>>>>> Stashed changes
 # print(metadata)
 
 
@@ -932,8 +947,15 @@ def generate_mongodb_query(metadata, client):
     collection_name = 'UW_std_person'
     fields = metadata[collection_name]  # Get field metadata for the collection
     
-    # Check for numeric fields
-    numeric_fields = [field for field in fields if field["type"] in ("int", "float", "decimal")]
+    # # Check for numeric fields
+    # numeric_fields = [field for field in fields if field["type"] in ("int", "float", "decimal")]
+    # has_numeric = bool(numeric_fields)
+
+    # Check for numeric fields excluding 'id' fields
+    numeric_fields = [
+        field for field in fields
+        if field["type"] in ("int", "float", "decimal") and 'id' not in field["name"].lower()
+    ]
     has_numeric = bool(numeric_fields)
     
     # Pick a random template
@@ -1032,9 +1054,15 @@ import random
 from bson.json_util import dumps
 
 # MongoDB credentials and connection string
+<<<<<<< Updated upstream
 # mongo_username = login_info['mongo_username']
 # mongo_password = login_info['mongo_password']
 # database_name = login_info['database_name']
+=======
+mongo_username = login_info['mongo_username']
+mongo_password = login_info['mongo_password']
+database_name = login_info['mongo_database_name']
+>>>>>>> Stashed changes
 
 # connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
 # client = pymongo.MongoClient(connection_string)
@@ -1063,6 +1091,7 @@ def execute_mongodb_query(query, db):
         return f"Error: {str(e)}"
 
 # keywords = ['aggregate']
+<<<<<<< Updated upstream
 
 # # Generate, execute, and print 5 MongoDB queries with results
 # results = []
@@ -1080,6 +1109,29 @@ def execute_mongodb_query(query, db):
 #         continue
 #     # Append the successful query and its output
 #     results.append({"query": query, "summary": summary, "output": result})
+=======
+exclusion_words = ['$ne']
+
+# Generate, execute, and print 5 MongoDB queries with results
+results = []
+while len(results) < 5:  # Ensure we collect 5 queries with non-empty results
+    query, summary = generate_mongodb_query(metadata, client)
+    # # Check if all keywords are present in the query
+    # if not all(keyword.lower() in query.lower() for keyword in keywords):
+    #     continue  # Retry if the query does not contain all keywords
+    # Check if any exclusion words are present in the query
+    if any(exclusion_word.lower() in query.lower() for exclusion_word in exclusion_words):
+        continue  # Retry if any exclusion words are found
+    if query.startswith("Error:"):
+        continue  # Generate a new query if there's an error
+    result = execute_mongodb_query(eval(query), db)  # Evaluate and execute the query
+    if isinstance(result, str) and result.startswith("Error:"):
+        continue  # Generate a new query if execution fails
+    if not result:  # Skip queries that return an empty result set
+        continue
+    # Append the successful query and its output
+    results.append({"query": query, "summary": summary, "output": result})
+>>>>>>> Stashed changes
 
 # # Print the queries, summaries, and results
 # for result in results:
