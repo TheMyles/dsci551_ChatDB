@@ -66,19 +66,6 @@ def get_mongodb_metadata(login_info):
     return metadata
 
 
-<<<<<<< Updated upstream
-# Example usage
-# login_info = {
-#     'endpoint': "localhost",
-#     'username': "root",
-#     'password': "Bobo8128!",
-#     'database_name': "ChatDB",
-#     'mongo_username': 'mdmolnar',
-#     'mongo_password': 'AtM0nG0d1452'
-# }
-
-# metadata = get_mongodb_metadata(login_info)
-=======
 login_info = {
     'endpoint': "localhost",
     'username': "root",
@@ -91,7 +78,6 @@ login_info = {
 
 
 metadata = get_mongodb_metadata(login_info)
->>>>>>> Stashed changes
 # print(metadata)
 
 
@@ -1054,15 +1040,9 @@ import random
 from bson.json_util import dumps
 
 # MongoDB credentials and connection string
-<<<<<<< Updated upstream
-# mongo_username = login_info['mongo_username']
-# mongo_password = login_info['mongo_password']
-# database_name = login_info['database_name']
-=======
 mongo_username = login_info['mongo_username']
 mongo_password = login_info['mongo_password']
 database_name = login_info['mongo_database_name']
->>>>>>> Stashed changes
 
 # connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
 # client = pymongo.MongoClient(connection_string)
