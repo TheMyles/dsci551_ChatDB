@@ -11,6 +11,7 @@ from generate_sql_examples_final import validate_query
 from generate_sql_examples_final import find_keywords_for_examples
 from generate_sql_examples_final import display_queries
 from generate_sql_examples_final import execute_queries
+from generate_sql_examples_final import display_join_queries
 
 from mongo_examples_testing import get_mongodb_metadata
 
@@ -29,25 +30,25 @@ Functions in secondary py files
     Generating queries] * 2 
 """
 
-login_info = {
-    'endpoint': "localhost",
-    'username': "root",
-    'password': "MySQLDBP455",
-    'sql_database_name': "chatdb",
-    'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452',
-    'mongo_database_name': "ChatDB",
-}
-
 # login_info = {
 #     'endpoint': "localhost",
 #     'username': "root",
-#     'password': "Bobo8128!",
+#     'password': "MySQLDBP455",
 #     'sql_database_name': "chatdb",
 #     'mongo_username': 'mdmolnar',
 #     'mongo_password': 'AtM0nG0d1452',
 #     'mongo_database_name': "ChatDB",
 # }
+
+login_info = {
+    'endpoint': "localhost",
+    'username': "root",
+    'password': "Bobo8128!",
+    'sql_database_name': "chatdb",
+    'mongo_username': 'mdmolnar',
+    'mongo_password': 'AtM0nG0d1452',
+    'mongo_database_name': "ChatDB",
+}
 
 connection = pymysql.connect(
     host=login_info['endpoint'],
@@ -102,8 +103,10 @@ def chatdb():
 
                 keywords_with_aggregates = find_keywords_for_examples(keywords, user_input)
                 # print(keywords_with_aggregates)
-
-                display_queries(metadata, connection, keywords_with_aggregates)
+                if 'JOIN' in keywords_with_aggregates:
+                    display_join_queries(metadata, connection, keywords_with_aggregates)
+                else:
+                    display_queries(metadata, connection, keywords_with_aggregates)
             elif 'MONGODB' in keywords:
                 pass
             else:

@@ -338,3 +338,163 @@ def execute_queries(query, connection):
     # Print the result in tabular format using tabulate
     print("Output:")
     print(tabulate(result, headers=column_names, tablefmt="pretty"))
+
+
+
+
+
+
+
+# JOIN STUFF
+def generate_sql_join_query(metadata, connection):
+    # Query templates grouped by type with summary placeholders
+    templates_with_summaries = [
+        {
+            "query": "SELECT <COLUMN1>, <COLUMN2> FROM <TABLE1> INNER JOIN <TABLE2> ON <TABLE1>.<JOINT_COLUMN1> = <TABLE2>.<JOINT_COLUMN2>;",
+            "summary": "Find rows by joining <TABLE1> and <TABLE2> on <JOINT_COLUMN1> and <JOINT_COLUMN2>, showing <COLUMN1> and <COLUMN2>."
+        },
+        {
+            "query": "SELECT AVG(<NUMCOLUMN>) FROM <TABLE1> INNER JOIN <TABLE2> ON <TABLE1>.<JOINT_COLUMN1> = <TABLE2>.<JOINT_COLUMN2> WHERE <TABLE1>.<COLUMN1> = <STRVALUE>;",
+            "summary": "Find the average of <NUMCOLUMN> from <TABLE1> and <TABLE2>, filtered where <COLUMN1> equals <STRVALUE>, joining on <JOINT_COLUMN1> and <JOINT_COLUMN2>."
+        },
+        {
+            "query": "SELECT <COLUMN1>, SUM(<NUMCOLUMN>) FROM <TABLE1> INNER JOIN <TABLE2> ON <TABLE1>.<JOINT_COLUMN1> = <TABLE2>.<JOINT_COLUMN2> GROUP BY <COLUMN1>;",
+            "summary": "Find the sum of <NUMCOLUMN> grouped by <COLUMN1> by joining <TABLE1> and <TABLE2> on <JOINT_COLUMN1> and <JOINT_COLUMN2>."
+        },
+        {
+            "query": "SELECT <COLUMN1>, MAX(<NUMCOLUMN>) FROM <TABLE1> INNER JOIN <TABLE2> ON <TABLE1>.<JOINT_COLUMN1> = <TABLE2>.<JOINT_COLUMN2> WHERE <COLUMN2> LIKE '%<STRVALUE>%' GROUP BY <COLUMN1>;",
+            "summary": "Find the maximum of <NUMCOLUMN>, grouped by <COLUMN1> where <COLUMN2> contains <STRVALUE>, joining <TABLE1> and <TABLE2> on <JOINT_COLUMN1> and <JOINT_COLUMN2>."
+        },
+        {
+            "query": "SELECT COUNT(*) FROM <TABLE1> INNER JOIN <TABLE2> ON <TABLE1>.<JOINT_COLUMN1> = <TABLE2>.<JOINT_COLUMN2>;",
+            "summary": "Count rows by joining <TABLE1> and <TABLE2> on <JOINT_COLUMN1> and <JOINT_COLUMN2>."
+        },
+        {
+            "query": "SELECT DISTINCT <COLUMN1>, <COLUMN2> FROM <TABLE1> INNER JOIN <TABLE2> ON <TABLE1>.<JOINT_COLUMN1> = <TABLE2>.<JOINT_COLUMN2> WHERE <COLUMN2> = <STRVALUE>;",
+            "summary": "Find distinct rows for <COLUMN1> and <COLUMN2> where <COLUMN2> equals <STRVALUE>, by joining <TABLE1> and <TABLE2> on <JOINT_COLUMN1> and <JOINT_COLUMN2>."
+        }
+    ]
+    
+    # Pick random tables for JOIN queries
+    table1, table2 = random.sample(list(metadata.keys()), 2)  # Randomly pick two tables
+    columns_table1 = metadata[table1]
+    columns_table2 = metadata[table2]
+    
+    # Determine joinable columns (primary keys and naming conventions)
+    joinable_columns_table1 = [
+        col for col in columns_table1 if col["primary_key"] or "id" in col["name"] or "key" in col["name"]
+    ]
+    joinable_columns_table2 = [
+        col for col in columns_table2 if col["primary_key"] or "id" in col["name"] or "key" in col["name"]
+    ]
+    
+    if joinable_columns_table1 and joinable_columns_table2:
+        joint_column1 = random.choice(joinable_columns_table1)
+        joint_column2 = random.choice(joinable_columns_table2)
+    else:
+        joint_column1, joint_column2 = None, None  # No joinable columns found
+    
+    # Pick a random template
+    template_data = random.choice(templates_with_summaries)
+    query = template_data["query"]
+    summary = template_data["summary"]
+    
+    # Replace table placeholders
+    query = query.replace("<TABLE1>", table1).replace("<TABLE2>", table2)
+    summary = summary.replace("<TABLE1>", table1).replace("<TABLE2>", table2)
+    
+    # Replace joint column placeholders if applicable
+    if joint_column1 and joint_column2:
+        query = query.replace("<JOINT_COLUMN1>", joint_column1["name"])
+        query = query.replace("<JOINT_COLUMN2>", joint_column2["name"])
+        summary = summary.replace("<JOINT_COLUMN1>", joint_column1["name"])
+        summary = summary.replace("<JOINT_COLUMN2>", joint_column2["name"])
+    
+    # Handle column replacements
+    columns_table1_names = [col["name"] for col in columns_table1]
+    columns_table2_names = [col["name"] for col in columns_table2]
+    
+    while "<COLUMN1>" in query:
+        column1 = random.choice(columns_table1_names)
+        query = query.replace("<COLUMN1>", column1, 1)
+        summary = summary.replace("<COLUMN1>", column1, 1)
+    
+    while "<COLUMN2>" in query:
+        column2 = random.choice(columns_table2_names)
+        query = query.replace("<COLUMN2>", column2, 1)
+        summary = summary.replace("<COLUMN2>", column2, 1)
+    
+    # Replace <NUMCOLUMN> placeholders, excluding primary keys
+    while "<NUMCOLUMN>" in query:
+        numeric_columns = [
+            col["name"] for col in columns_table1 if col["type"] in ("int", "float", "decimal") and not col["primary_key"]
+        ]
+        if not numeric_columns:
+            return "Error: No numeric columns available for the selected table.", None
+        num_column = random.choice(numeric_columns)
+        query = query.replace("<NUMCOLUMN>", num_column, 1)
+        summary = summary.replace("<NUMCOLUMN>", num_column, 1)
+    
+    # Replace <NUMVALUE> placeholders with random numeric values
+    while "<NUMVALUE>" in query:
+        num_value = random.randint(1, 100)  # Replace with random numeric value
+        query = query.replace("<NUMVALUE>", str(num_value), 1)
+        summary = summary.replace("<NUMVALUE>", str(num_value), 1)
+    
+    # Replace <STRVALUE> with unique values from the associated column
+    while "<STRVALUE>" in query:
+        str_column = random.choice([col for col in columns_table1 if "char" in col["type"] or "text" in col["type"]])
+        if str_column["unique_values"]:
+            str_value = random.choice(str_column["unique_values"])
+        else:
+            str_value = "default"
+        str_value = str(str_value)  # Ensure it's a string
+        query = query.replace("<STRVALUE>", f"'{str_value}'", 1)
+        summary = summary.replace("<STRVALUE>", str_value, 1)
+    
+    return query, summary
+
+
+def display_join_queries(metadata, connection, keywords_without_example):
+    # List to store the generated queries
+    queries_list = []
+
+    # Generate and print 5 queries at a time
+    for _ in range(5):
+        while True:
+            sql_query, summary_text = generate_sql_join_query(metadata, connection)
+
+            # Validate the query and ensure it uses the 'review' column
+            if sql_query.startswith("Error:") or not validate_query(sql_query, connection):
+                continue  # Retry if the query is invalid or fails
+
+            # Check if all keywords are present in the query
+            if not all(keyword.lower() in sql_query.lower() for keyword in keywords_without_example):
+                continue  # Retry if the query does not contain all keywords
+
+            # Store the valid query and its summary in the list
+            queries_list.append((sql_query, summary_text))
+
+            # Print the generated query and summary
+            print("\nGenerated Query:")
+            print(sql_query)
+            print("Summary:")
+            print(summary_text)
+
+            break  # Exit the while loop once a valid query is found
+
+    # Print the queries list and prompt the user to select a query
+    print("\nSelect a query to run (1-5):")
+    for i, (query, summary) in enumerate(queries_list, 1):
+        print(f"{i}. {summary}")  # Print the summary for each query
+
+    # Get the user's choice
+    user_choice = int(input("Enter the number of the query you want to run: ")) - 1  # Adjust for 0-based index
+
+    # Ensure the choice is valid
+    if 0 <= user_choice < len(queries_list):
+        selected_query, selected_summary = queries_list[user_choice]
+        # Execute the selected query
+        execute_queries(selected_query, connection)
+    else:
+        print("Invalid choice. Please select a number between 1 and 5.")
