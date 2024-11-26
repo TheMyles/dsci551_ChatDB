@@ -3,6 +3,7 @@ import numpy as np
 from mongo_examples_testing import get_mongodb_metadata
 import pymysql
 from tabulate import tabulate
+import string
 
 aggregate_words = {
     'MIN': ['minimum', 'smallest', 'lowest', 'least', 'min'],
@@ -33,7 +34,7 @@ desc_words = ['descending', 'desc', 'biggest to smallest', 'reverse', 'biggest']
 limit_words = ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit']
 
 def execute_sql_query(user_input, keywords, login_info):
-    user_list = user_input.replace(',', '').split()
+    user_list = user_input.translate(str.maketrans('', '', string.punctuation)).split()
     
     mdata = get_mysql_metadata(login_info)
 
@@ -88,7 +89,7 @@ def execute_sql_query(user_input, keywords, login_info):
                         processes.append(user_list[i+1])
                     elif user_list[i+2] in assoc_cols:
                         processes.append(user_list[i+2])
-
+        print('AGG:', processes)
 
         if len(processes)%2 ==1:
             processes.append('*')
@@ -302,7 +303,7 @@ def execute_sql_query(user_input, keywords, login_info):
 def sql_or_nosql(user_input, login_info):
     decision = []
 
-    user_list = user_input.replace(",", "").split()
+    user_list = user_input.translate(str.maketrans('', '', string.punctuation)).split()
 
     sql_mdata = get_mysql_metadata(login_info)
     mongo_mdata = get_mongodb_metadata(login_info)
@@ -313,7 +314,7 @@ def sql_or_nosql(user_input, login_info):
         elif word in mongo_mdata.keys():
             decision.append(0)
 
-    if np.mean(decision) > 0.5:
+    if len(decision) > 0 and np.mean(decision) > 0.5:
         return 'SQL'
     elif len(decision) > 0:
         return'MONGODB'

@@ -22,7 +22,7 @@ QUERY_PATTERNS = {
     "JOIN": ["join", "merge", "combine", "foreign key", "unite", "relate", "link",
              "connect", "associate", "bridge", "union", "inner", "outer", "left", "right"],
     "LIMIT": ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit', 'only', 'list'],
-    "SQL": ['sql', 'mysql'],
+    "SQL": ['sql', 'mysql', 'relational'],
     "MONGODB": ['mongo', 'mongodb', 'nosql']
 }
 
