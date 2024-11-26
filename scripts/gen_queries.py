@@ -32,9 +32,9 @@ order_words = ["order by", "sort", "sort by", "ordered", "order", "ascending", "
                "sequence", "order", "hierarchy", "top", "bottom", "sorted", 'biggest', 'smallest']
 
 desc_words = ['descending', 'desc', 'biggest to smallest', 'reverse', 'biggest']
-limit_words = ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit']
+limit_words = ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit', 'only']
 
-all_cols = ['all columns', 'every column', 'each column']
+all_cols = ['all columns', 'every column', 'each column', 'all the columns', 'all of the columns']
 
 
 def execute_sql_query(user_input, keywords, login_info):
@@ -77,7 +77,15 @@ def execute_sql_query(user_input, keywords, login_info):
             bigram = word + f' {user_list[i+1]}'
         except:
             pass
-        if bigram in all_cols:
+        try:
+            trigram = bigram + f' {user_list[i+2]}'
+        except:
+            pass
+        try:
+            quad = trigram + f' {user_list[i+3]}'
+        except:
+            pass
+        if bigram in all_cols or trigram in all_cols or quad in all_cols:
             assoc_cols.append('*')
     if len(assoc_cols) == 0:
         assoc_cols.append('*')
@@ -311,7 +319,7 @@ def execute_sql_query(user_input, keywords, login_info):
 def sql_or_nosql(user_input, login_info):
     decision = []
 
-    user_list = user_input.translate(str.maketrans('', '', string.punctuation)).split()
+    user_list = user_input.translate(str.maketrans('', '', string.punctuation.replace('_', ''))).split()
 
     sql_mdata = get_mysql_metadata(login_info)
     mongo_mdata = get_mongodb_metadata(login_info)
@@ -345,6 +353,7 @@ def execute_mongo_query(user_input, keywords, login_info):
     if not assoc_collections:
         print("No matching collections found.")
         return
+    print('Generating query for table(s):', assoc_collections)
 
     assoc_cols = []
     col_idx_mdata = []
@@ -353,7 +362,7 @@ def execute_mongo_query(user_input, keywords, login_info):
         for j in range(len(mdata[assoc_collections[i]])):
             table_columns.append(mdata[assoc_collections[i]][j]['name'])
 
-        print('tcols:', table_columns)
+        print('Columns in associated table:', table_columns)
         for word in user_list:
             if word in table_columns:
                 assoc_cols.append(word)
@@ -365,12 +374,13 @@ def execute_mongo_query(user_input, keywords, login_info):
         for j in col_idx_mdata:
             unique_vals += mdata[i][j]['unique_values']
 
+    print('Creating query with columns:', assoc_cols)
+
     unique_vals = [str(item) if isinstance(item, (int, float)) else item for item in unique_vals]
 
     collection = db[assoc_collections[0]]
 
     pipeline = []
-    print(assoc_collections)
     # Handle WHERE conditions (filters)
     if 'WHERE' in keywords:
         match_stage = {}
@@ -407,7 +417,6 @@ def execute_mongo_query(user_input, keywords, login_info):
                         match_stage[field] = {"$ne": value}
         if match_stage:
             pipeline.append({"$match": match_stage})
-        print("Match", match_stage)
     
     if 'SELECT' in keywords or 'AGGREGATE' in keywords:
         for i, word in enumerate(user_list):
@@ -415,7 +424,15 @@ def execute_mongo_query(user_input, keywords, login_info):
                 bigram = word + f' {user_list[i+1]}'
             except:
                 pass
-            if bigram in all_cols:
+            try:
+                trigram = bigram + f' {user_list[i+2]}'
+            except:
+                pass
+            try:
+                quad = trigram + f' {user_list[i+3]}'
+            except:
+                pass
+            if bigram in all_cols or trigram in all_cols or quad in all_cols:
                 projection = {"_id": 0}
                 break
             elif assoc_cols:
@@ -444,7 +461,7 @@ def execute_mongo_query(user_input, keywords, login_info):
                     group_by_field = user_list[i+2]
                 elif user_list[i+3] in assoc_cols:
                     group_by_field = user_list[i+3]
-        print("GB:", group_by_field)
+        # print("GB:", group_by_field)
         func = '$sum'
         target = 1
         if 'AGGREGATE' in keywords:
@@ -465,9 +482,37 @@ def execute_mongo_query(user_input, keywords, login_info):
         })
         if not any('$project' in stage for stage in pipeline):
             pipeline = [stage for stage in pipeline if '$project' not in stage]
-
     
+    elif 'AGGREGATE' in keywords:
+        processes = []
 
+        for key, value in aggregate_words.items():
+            for i, word in enumerate(user_list):
+                if word in value:
+                    processes.append(key)
+                    if user_list[i+1] in assoc_cols:
+                        processes.append(user_list[i+1])
+                    elif user_list[i+2] in assoc_cols:
+                        processes.append(user_list[i+2])
+        
+        processes = ['SUM' if item == 'COUNT' else item for item in processes]
+        group_stage = {
+            "$group": {
+                "_id": None
+            }
+        }
+        if len(processes) % 2 == 1:
+            processes.append(1)
+        # print("AGG:", processes)
+
+        for i, item in enumerate(processes):
+            if item in aggregate_words.keys():
+                alias = f'{item.lower()}_{processes[i+1]}'
+                group_stage['$group'][alias] = {f'${item.lower()}': f'${processes[i+1]}'}
+
+        pipeline.append(group_stage)
+        if not any('$project' in stage for stage in pipeline):
+            pipeline = [stage for stage in pipeline if '$project' not in stage]
 
     # Handle ORDER BY
     if 'ORDER BY' in keywords:
@@ -516,8 +561,6 @@ def execute_mongo_query(user_input, keywords, login_info):
                     if not any([True for stage in pipeline if '$limit' in stage]):
                         pipeline.append({"$limit": 5})
                 
-
-
     print("Executing MongoDB pipeline:", pipeline)
     try:
         result = list(collection.aggregate(pipeline))

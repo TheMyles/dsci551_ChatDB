@@ -1,4 +1,4 @@
-
+// This file is basically notes of good queries that work well.
 // SQL
 user_input = 'show me all columns where food_type is burgers and city is alameda from generalinfo'
 query = SELECT * FROM generalinfo WHERE food_type = 'burgers' AND city = 'alameda' ;
@@ -11,4 +11,10 @@ query = SELECT review, COUNT(*) FROM generalinfo GROUP BY review;
 
 
 // MongoDB
+user_input = 'Show me all of the columns and only 5 rows where hasPosition is equal to Faculty from UW_std_person'
+pipeline = [{'$match': {'hasPosition': 'Faculty'}}, {'$project': {'_id': 0}}, {'$limit': 5}]
+
+user_input = 'show me UW_std_person grouped by hasPosition'
+pipeline = [{'$project': {'hasPosition': 1}}, {'$group': {'_id': '$hasPosition', 'sum': {'$sum': 1}}}]
+
 
