@@ -22,3 +22,6 @@ pipeline = [{'$match': {'hasPosition': 'Faculty'}}, {'$project': {'_id': 0}}, {'
 user_input = 'show me average p_id, maximum p_id, minimum p_id, and count of all rows from UW_std_person grouped by hasPosition'
 pipeline = [{'$project': {'p_id': 1, 'hasPosition': 1}}, {'$group': {'_id': '$hasPosition', 'min_p_id': {'$min': '$p_id'}, 'max_p_id': {'$max': '$p_id'}, 'avg_p_id': {'$avg': '$p_id'}, 'sum_1': {'$sum': 1}}}]
 
+user_input = 'show me all of the columns and top 5 rows where yearsInProgram equals Year_4 from UW_std_person sorted by p_id'
+pipeline = [{'$match': {'yearsInProgram': 'Year_4'}}, {'$project': {'_id': 0}}, {'$sort': {'p_id': 1}}, {'$limit': 5}]
+
