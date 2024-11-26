@@ -64,7 +64,6 @@ def chatdb():
     print("Would you like to upload your own dataset or explore our system's pre-uploaded datasets? Type \'exit\' to quit.")
 
     while continue_running:
-        reponse = ''
         user_input = input("Message ChatDB: ")
         memory.append(user_input)
 
@@ -118,9 +117,6 @@ def chatdb():
                 print('Generating a MongoDB query...')
             else:
                 print('In your query, please specify which table/collection you would like to use.')
-
-
-        print(reponse)
 
 
 
