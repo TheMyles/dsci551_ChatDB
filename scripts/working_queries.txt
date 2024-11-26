@@ -9,6 +9,8 @@ query = SELECT street_num, city FROM location WHERE city = 'san francisco' ORDER
 user_input =  "How many restaurants have each review from generalinfo" 
 query = SELECT review, COUNT(*) FROM generalinfo GROUP BY review;
 
+user_input = 'show me average p_id, maximum p_id, minimum p_id, and count of all rows from person grouped by hasPosition'
+query = SELECT hasPosition, MIN(p_id), MAX(p_id), AVG(p_id), COUNT(*) FROM person GROUP BY hasPosition;
 
 // MongoDB
 user_input = 'Show me all of the columns and only 5 rows where hasPosition is equal to Faculty from UW_std_person'
@@ -17,4 +19,6 @@ pipeline = [{'$match': {'hasPosition': 'Faculty'}}, {'$project': {'_id': 0}}, {'
 user_input = 'show me UW_std_person grouped by hasPosition'
 pipeline = [{'$project': {'hasPosition': 1}}, {'$group': {'_id': '$hasPosition', 'sum': {'$sum': 1}}}]
 
+user_input = 'show me average p_id, maximum p_id, minimum p_id, and count of all rows from UW_std_person grouped by hasPosition'
+pipeline = [{'$project': {'p_id': 1, 'hasPosition': 1}}, {'$group': {'_id': '$hasPosition', 'min_p_id': {'$min': '$p_id'}, 'max_p_id': {'$max': '$p_id'}, 'avg_p_id': {'$avg': '$p_id'}, 'sum_1': {'$sum': 1}}}]
 
