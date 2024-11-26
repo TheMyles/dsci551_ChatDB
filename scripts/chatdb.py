@@ -16,7 +16,7 @@ from generate_sql_examples_final import display_join_queries
 from generate_mongo_examples_final import get_mongodb_metadata
 from generate_mongo_examples_final import generate_mongodb_query
 from generate_mongo_examples_final import validate_mongo_query
-from generate_mongo_examples_final import find_keywords_for_examples
+from generate_mongo_examples_final import find_keywords_for_examples_mongo
 from generate_mongo_examples_final import display_mongo_queries
 from generate_mongo_examples_final import execute_mongo_query
 
@@ -123,7 +123,7 @@ def chatdb():
             elif 'MONGODB' in keywords:
                 metadata = get_mongodb_metadata(login_info)
 
-                keywords_with_aggregates = find_keywords_for_examples(keywords, user_input)
+                keywords_with_aggregates = find_keywords_for_examples_mongo(keywords, user_input)
                 display_mongo_queries(metadata, login_info, keywords_with_aggregates)
             else:
                 print("Please specify either SQL or MONGODB in your request for examples.")

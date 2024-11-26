@@ -342,7 +342,14 @@ def execute_mongo_query(user_input, keywords, login_info):
     user_list = user_input.translate(str.maketrans('', '', string.punctuation.replace('_', ''))).split()
 
     # Connect to MongoDB
-    connection_string = f'mongodb+srv://{login_info['mongo_username']}:{login_info['mongo_password']}@cluster0.tgu2d.mongodb.net/'
+    # connection_string = f'mongodb+srv://{login_info['mongo_username']}:{login_info['mongo_password']}@cluster0.tgu2d.mongodb.net/'
+        # MongoDB credentials and connection string
+    mongo_username = login_info['mongo_username']
+    mongo_password = login_info['mongo_password']
+    database_name = login_info['mongo_database_name']
+
+    connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
+
     mdata = get_mongodb_metadata(login_info)
     client = pymongo.MongoClient(connection_string)
     db = client[login_info['mongo_database_name']]
@@ -488,7 +495,7 @@ def execute_mongo_query(user_input, keywords, login_info):
         for i, item in enumerate(processes):
             if item in aggregate_words.keys():
                 try:
-                    alias = f'{item.lower()}_{processes[i+1].replace('$', '')}'
+                    alias = f"{item.lower()}_{processes[i+1].replace('$', '')}"
                 except:
                     alias = f'{item.lower()}_{processes[i+1]}'
                 try:

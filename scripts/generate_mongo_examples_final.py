@@ -252,9 +252,9 @@ def generate_mongodb_query(metadata, client):
     return query_template, summary_template
 
 
-def find_keywords_for_examples(keywords, user_input):
+def find_keywords_for_examples_mongo(keywords, user_input):
     keywords_without_example = [keyword for keyword in keywords if keyword != "EXAMPLE"]
-    keywords_without_example.remove("SQL")
+    keywords_without_example.remove("MONGODB")
     # List of words associated with 'AGGREGATE'
     aggregate_keywords = ["many", "sum", "average", "mean", "count", "total", "maximum", "minimum",
                 "min", "max", "avg", "median", "aggregate", "statistics", "metrics"]
@@ -276,34 +276,54 @@ from pymongo.errors import PyMongoError
 from tabulate import tabulate
 
 
-# Function to validate query execution in MongoDB
-def validate_mongo_query(query, client, database_name):
+def validate_mongo_query(query, db):
     try:
-        # Extract collection name and operation type
+        # Check if the query is a string and evaluate it into a dictionary
+        if isinstance(query, str):
+            query = eval(query)
+
+        # Handle "find" queries
         if "find" in query:
             collection_name = query["find"]
-            filter_query = query.get("filter", {})
-            limit = query.get("limit", 0)
-            sort = query.get("sort", [])
+            filter_condition = query.get("filter", {})
+            projection = query.get("projection", None)
+            limit = query.get("limit", 15)  # Default limit to 15 if not provided
+
+            # Ensure limit is an integer
+            if not isinstance(limit, int):
+                limit = int(limit)  # Attempt to convert to integer, or raise an error
 
             # Execute the query
-            collection = client[database_name][collection_name]
-            results = collection.find(filter_query).sort(sort).limit(limit)
-            return bool(list(results))  # Return True if results exist, False otherwise
+            cursor = db[collection_name].find(filter_condition, projection).limit(limit)
+            results = list(cursor)  # Fetch results as a list
+            return bool(results)  # Return True if results are non-empty, False otherwise
 
+        # Handle "aggregate" queries
         elif "aggregate" in query:
             collection_name = query["aggregate"]
             pipeline = query.get("pipeline", [])
 
-            # Execute the aggregation pipeline
-            collection = client[database_name][collection_name]
-            results = collection.aggregate(pipeline)
-            return bool(list(results))  # Return True if results exist, False otherwise
+            # Add a $limit stage to the pipeline if it doesn't already exist
+            if not any("$limit" in stage for stage in pipeline):
+                pipeline.append({"$limit": 15})
 
+            # Execute the aggregation pipeline
+            cursor = db[collection_name].aggregate(pipeline)
+            results = list(cursor)  # Fetch results as a list
+            return bool(results)  # Return True if results are non-empty, False otherwise
+
+        # Unsupported query type
         else:
-            return False  # Unsupported query type
-    except PyMongoError:
+            print("Unsupported query type.")
+            return False
+
+    except Exception as e:
+        print(f"Error during query validation: {e}")
         return False
+
+
+
+
 
 
 # Function to display and execute queries in MongoDB
@@ -328,7 +348,7 @@ def display_mongo_queries(metadata, login_info, keywords_without_example):
             mongo_query, summary_text = generate_mongodb_query(metadata, client)
 
             # Validate the query
-            if mongo_query.startswith("Error:") or not validate_mongo_query(mongo_query, client, database_name):
+            if mongo_query.startswith("Error:") or not validate_mongo_query(mongo_query, db):
                 continue  # Retry if the query is invalid or fails
 
             # Check if all keywords are present in the query
