@@ -38,7 +38,7 @@ all_cols = ['all columns', 'every column', 'each column', 'all the columns', 'al
 
 
 def execute_sql_query(user_input, keywords, login_info):
-    user_list = user_input.translate(str.maketrans('', '', string.punctuation)).split()
+    user_list = user_input.translate(str.maketrans('', '', string.punctuation.replace('_', ''))).split()
     
     mdata = get_mysql_metadata(login_info)
 
@@ -462,24 +462,42 @@ def execute_mongo_query(user_input, keywords, login_info):
                 elif user_list[i+3] in assoc_cols:
                     group_by_field = user_list[i+3]
         # print("GB:", group_by_field)
-        func = '$sum'
-        target = 1
+        processes = []
+
         if 'AGGREGATE' in keywords:
             for key, values in aggregate_words.items():
                 for i, word in enumerate(user_list):
                     if word.lower() in values:
-                        func = f'${key.lower()}'
+                        processes.append(key)
                         if user_list[i+1] in assoc_cols:
-                            target = f'${user_list[i+1]}'
+                            processes.append(f'${user_list[i+1]}')
                         elif user_list[i+2] in assoc_cols:
-                            target = f'${user_list[i+2]}'
+                            processes.append(f'${user_list[i+2]}')
 
-        pipeline.append({
+        group_stage = {
             "$group": {
-                "_id": f"${group_by_field}",
-                func[1:]: {func: target}
+                "_id": f"${group_by_field}"
             }
-        })
+        }
+
+        processes = ['SUM' if item == 'COUNT' else item for item in processes]
+        if len(processes) % 2 == 1:
+            processes.append(1)
+        print("AGG:", processes)
+
+        for i, item in enumerate(processes):
+            if item in aggregate_words.keys():
+                try:
+                    alias = f'{item.lower()}_{processes[i+1].replace('$', '')}'
+                except:
+                    alias = f'{item.lower()}_{processes[i+1]}'
+                try:
+                    int(processes[i+1])
+                    group_stage['$group'][alias] = {f'${item.lower()}': processes[i+1]}
+                except:
+                    group_stage['$group'][alias] = {f'${item.lower()}': f'{processes[i+1]}'}
+
+        pipeline.append(group_stage)
         if not any('$project' in stage for stage in pipeline):
             pipeline = [stage for stage in pipeline if '$project' not in stage]
     
@@ -488,7 +506,7 @@ def execute_mongo_query(user_input, keywords, login_info):
 
         for key, value in aggregate_words.items():
             for i, word in enumerate(user_list):
-                if word in value:
+                if word.lower() in value:
                     processes.append(key)
                     if user_list[i+1] in assoc_cols:
                         processes.append(user_list[i+1])
@@ -503,7 +521,7 @@ def execute_mongo_query(user_input, keywords, login_info):
         }
         if len(processes) % 2 == 1:
             processes.append(1)
-        # print("AGG:", processes)
+        print("AGG:", processes)
 
         for i, item in enumerate(processes):
             if item in aggregate_words.keys():
