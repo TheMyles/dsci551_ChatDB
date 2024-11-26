@@ -21,7 +21,7 @@ QUERY_PATTERNS = {
               "match", "constraint", 'fewer', 'below', 'equal', 'equals', 'matches'],
     "JOIN": ["join", "merge", "combine", "foreign key", "unite", "relate", "link",
              "connect", "associate", "bridge", "union", "inner", "outer", "left", "right"],
-    "LIMIT": ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit'],
+    "LIMIT": ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit', 'only', 'list'],
     "SQL": ['sql', 'mysql'],
     "MONGODB": ['mongo', 'mongodb', 'nosql']
 }
