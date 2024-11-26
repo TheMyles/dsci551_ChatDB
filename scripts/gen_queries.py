@@ -179,7 +179,13 @@ def execute_sql_query(user_input, keywords, login_info):
                         processes.append(f'{user_list[i+3]} {user_list[i+4]}')
 
         query += 'WHERE '
-        for process_idx in range(0, len(processes), 3):
+        if len(processes) > 3:
+            for idx in range(1, len(processes)//3):
+                processes.insert(idx*3, 'AND')
+        
+        print("WHERE:", processes)
+
+        for process_idx in range(0, len(processes), 4):
             try:
                 processes[process_idx+2] = int(processes[process_idx+2])
                 if processes[process_idx+1] == 'GREATER_THAN':
@@ -199,6 +205,11 @@ def execute_sql_query(user_input, keywords, login_info):
                     query += f"{processes[process_idx]} = \'{processes[process_idx+2]}\'"
                 elif processes[process_idx+1] == 'NOT_EQUAL_TO':
                     query += f"{processes[process_idx]} != \'{processes[process_idx+2]}\'"
+            try:
+                if processes[process_idx+3] == 'AND':
+                    query += ' AND '
+            except:
+                pass
 
         query += ' '
 
