@@ -4,6 +4,7 @@ from mongo_examples_testing import get_mongodb_metadata
 import pymysql
 from tabulate import tabulate
 import string
+import pymongo
 
 aggregate_words = {
     'MIN': ['minimum', 'smallest', 'lowest', 'least', 'min'],
@@ -33,6 +34,9 @@ order_words = ["order by", "sort", "sort by", "ordered", "order", "ascending", "
 desc_words = ['descending', 'desc', 'biggest to smallest', 'reverse', 'biggest']
 limit_words = ['top', 'bottom', 'highest', 'lowest', 'biggest', 'smallest', 'limit']
 
+all_cols = ['all columns', 'every column', 'each column']
+
+
 def execute_sql_query(user_input, keywords, login_info):
     user_list = user_input.translate(str.maketrans('', '', string.punctuation)).split()
     
@@ -45,7 +49,7 @@ def execute_sql_query(user_input, keywords, login_info):
     for word in user_list:
         if word in tables:
             assoc_tables.append(word)
-    # print('tables:', assoc_tables)
+    print('Generating query for table:', assoc_tables)
 
     assoc_cols = []
     col_idx_mdata = []
@@ -54,7 +58,7 @@ def execute_sql_query(user_input, keywords, login_info):
         for j in range(len(mdata[assoc_tables[i]])):
             table_columns.append(mdata[assoc_tables[i]][j]['name'])
 
-        # print('tcols:', table_columns)
+        print('Columns in associated table:', table_columns)
         for word in user_list:
             if word in table_columns:
                 assoc_cols.append(word)
@@ -68,9 +72,16 @@ def execute_sql_query(user_input, keywords, login_info):
 
     unique_vals = [str(item) if isinstance(item, (int, float)) else item for item in unique_vals]
 
+    for i, word in enumerate(user_list):
+        try:
+            bigram = word + f' {user_list[i+1]}'
+        except:
+            pass
+        if bigram in all_cols:
+            assoc_cols.append('*')
     if len(assoc_cols) == 0:
         assoc_cols.append('*')
-    # print('assoc_cols:', assoc_cols)
+    print('Creating query with columns:', assoc_cols)
 
     query = ''
     from_in_query = False
@@ -154,8 +165,6 @@ def execute_sql_query(user_input, keywords, login_info):
                     elif f'{user_list[i+3]} {user_list[i+4]}' in unique_vals:
                         processes.append(f'{user_list[i+3]} {user_list[i+4]}')
 
-        # print("WHERE:", processes)
-
         query += 'WHERE '
         for process_idx in range(0, len(processes), 3):
             try:
@@ -177,7 +186,6 @@ def execute_sql_query(user_input, keywords, login_info):
                     query += f"{processes[process_idx]} = \'{processes[process_idx+2]}\'"
                 elif processes[process_idx+1] == 'NOT_EQUAL_TO':
                     query += f"{processes[process_idx]} != \'{processes[process_idx+2]}\'"
-
 
         query += ' '
 
@@ -240,14 +248,14 @@ def execute_sql_query(user_input, keywords, login_info):
                 
         for i, word in enumerate(user_list):
             try:
-                bigram = word + f' {user_list[i+1]}'
+                bigram = word.lower() + f' {user_list[i+1]}'.lower()
             except:
                 pass
             try:
                 trigram = bigram + f' {user_list[i+2]}'
             except:
                 pass
-            if word in desc_words or bigram in desc_words or trigram in desc_words:
+            if word.lower() in desc_words or bigram in desc_words or trigram in desc_words:
                 asc = 'DESC'
 
         query += f'ORDER BY ' + ', '.join(order) + f' {asc} '
@@ -256,7 +264,7 @@ def execute_sql_query(user_input, keywords, login_info):
     if 'LIMIT' in keywords:
         query += 'LIMIT '
         for i, word in enumerate(user_list):
-            if word in limit_words:
+            if word.lower() in limit_words:
                 try:
                     query += f'{int(user_list[i+1])}'
                 except:
@@ -320,3 +328,203 @@ def sql_or_nosql(user_input, login_info):
         return'MONGODB'
     else:
         return 'UNDEFINED'
+
+
+def execute_mongo_query(user_input, keywords, login_info):
+    user_list = user_input.translate(str.maketrans('', '', string.punctuation)).split()
+
+    # Connect to MongoDB
+    connection_string = f'mongodb+srv://{login_info['mongo_username']}:{login_info['mongo_password']}@cluster0.tgu2d.mongodb.net/'
+    mdata = get_mongodb_metadata(login_info)
+    client = pymongo.MongoClient(connection_string)
+    db = client[login_info['mongo_database_name']]
+
+    collections = db.list_collection_names()
+
+    assoc_collections = [word for word in user_list if word in collections]
+    if not assoc_collections:
+        print("No matching collections found.")
+        return
+
+    assoc_cols = []
+    col_idx_mdata = []
+    for i in range(len(assoc_collections)):
+        table_columns = []
+        for j in range(len(mdata[assoc_collections[i]])):
+            table_columns.append(mdata[assoc_collections[i]][j]['name'])
+
+        print('tcols:', table_columns)
+        for word in user_list:
+            if word in table_columns:
+                assoc_cols.append(word)
+                idx = table_columns.index(word)
+                col_idx_mdata.append(idx)
+
+    unique_vals = []
+    for i in assoc_collections:
+        for j in col_idx_mdata:
+            unique_vals += mdata[i][j]['unique_values']
+
+    unique_vals = [str(item) if isinstance(item, (int, float)) else item for item in unique_vals]
+
+    collection = db[assoc_collections[0]]
+
+    pipeline = []
+    print(assoc_collections)
+    # Handle WHERE conditions (filters)
+    if 'WHERE' in keywords:
+        match_stage = {}
+        for key, values in where_words.items():
+            for i, word in enumerate(user_list):
+                try:
+                    bigram = word + f' {user_list[i+1]}'
+                except:
+                    pass
+                if word.lower() in values:
+                    if user_list[i-1] in assoc_cols:
+                        field = user_list[i - 1]
+                    elif user_list[i-2] in assoc_cols:
+                        field = user_list[i - 2]
+                    if user_list[i+1] in unique_vals:
+                        value = user_list[i + 1]
+                    elif user_list[i+2] in unique_vals:
+                        value = user_list[i + 2]
+                    elif user_list[i+3] in unique_vals:
+                        value = user_list[i + 3]
+                    elif f'{user_list[i+1]} {user_list[i+2]}' in unique_vals:
+                        value = f'{user_list[i+1]} {user_list[i+2]}'
+                    elif f'{user_list[i+2]} {user_list[i+3]}' in unique_vals:
+                        value = f'{user_list[i+2]} {user_list[i+3]}'
+                    else:
+                        value = 100
+                    if key == 'LESS_THAN':
+                        match_stage[field] = {"$lt": value}
+                    elif key == 'GREATER_THAN':
+                        match_stage[field] = {"$gt": value}
+                    elif key == 'EQUAL_TO':
+                        match_stage[field] = value
+                    elif key == 'NOT_EQUAL_TO':
+                        match_stage[field] = {"$ne": value}
+        if match_stage:
+            pipeline.append({"$match": match_stage})
+        print("Match", match_stage)
+    
+    if 'SELECT' in keywords or 'AGGREGATE' in keywords:
+        for i, word in enumerate(user_list):
+            try:
+                bigram = word + f' {user_list[i+1]}'
+            except:
+                pass
+            if bigram in all_cols:
+                projection = {"_id": 0}
+                break
+            elif assoc_cols:
+                projection = {col: 1 for col in assoc_cols}
+        pipeline.append({"$project": projection})   
+
+    # Handle GROUP BY
+    if 'GROUP BY' in keywords:
+        group_by_field = None
+        for i, word in enumerate(user_list):
+            try:
+                bigram = word + f' {user_list[i+1]}'
+            except:
+                pass
+            if bigram in group_words:
+                if user_list[i+1] in assoc_cols:
+                    group_by_field = user_list[i+1]
+                elif user_list[i+2] in assoc_cols:
+                    group_by_field = user_list[i+2]
+                elif user_list[i+3] in assoc_cols:
+                    group_by_field = user_list[i+3]
+            elif word in group_words:
+                if user_list[i+1] in assoc_cols:
+                    group_by_field = user_list[i+1]
+                elif user_list[i+2] in assoc_cols:
+                    group_by_field = user_list[i+2]
+                elif user_list[i+3] in assoc_cols:
+                    group_by_field = user_list[i+3]
+        print("GB:", group_by_field)
+        func = '$sum'
+        target = 1
+        if 'AGGREGATE' in keywords:
+            for key, values in aggregate_words.items():
+                for i, word in enumerate(user_list):
+                    if word.lower() in values:
+                        func = f'${key.lower()}'
+                        if user_list[i+1] in assoc_cols:
+                            target = f'${user_list[i+1]}'
+                        elif user_list[i+2] in assoc_cols:
+                            target = f'${user_list[i+2]}'
+
+        pipeline.append({
+            "$group": {
+                "_id": f"${group_by_field}",
+                func[1:]: {func: target}
+            }
+        })
+        if not any('$project' in stage for stage in pipeline):
+            pipeline = [stage for stage in pipeline if '$project' not in stage]
+
+    
+
+
+    # Handle ORDER BY
+    if 'ORDER BY' in keywords:
+        sort_order = 1  # Default to ascending
+        for i, word in enumerate(user_list):
+            try:
+                bigram = word + f' {user_list[i+1]}'
+            except:
+                pass
+            if word in desc_words or bigram in desc_words:
+                sort_order = -1
+            if bigram in order_words:
+                if user_list[i+2] in assoc_cols:
+                    sort_field = user_list[i+2]
+                elif user_list[i+3] in assoc_cols:
+                    sort_field = user_list[i+3]
+            elif word in order_words:
+                if user_list[i+1] in assoc_cols:
+                    sort_field = user_list[i+1]
+                elif user_list[i+2] in assoc_cols:
+                    sort_field = user_list[i+2]
+                elif user_list[i+3] in assoc_cols:
+                    sort_field = user_list[i+3]
+
+        pipeline.append({"$sort": {sort_field: sort_order}})
+    
+    # Handle LIMIT
+    if 'LIMIT' in keywords:
+        for i, word in enumerate(user_list):
+            if word in limit_words:
+                try:
+                    pipeline.append({"$limit": int(user_list[i+1])})
+                except:
+                    pass
+                try:
+                    pipeline.append({"$limit": int(user_list[i+2])})
+                except:
+                    pass
+                try:
+                    pipeline.append({"$limit": int(user_list[i+3])})
+                except:
+                    pass
+                try:
+                    pipeline.append({"$limit": int(user_list[i-1])})
+                except:
+                    if not any([True for stage in pipeline if '$limit' in stage]):
+                        pipeline.append({"$limit": 5})
+                
+
+
+    print("Executing MongoDB pipeline:", pipeline)
+    try:
+        result = list(collection.aggregate(pipeline))
+        headers = result[0].keys()
+        data = [row.values() for row in result]
+        print(tabulate(data, headers=headers, tablefmt="pretty"))
+    except Exception as e:
+        print("Error executing query:", e)
+
+    client.close()

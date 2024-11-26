@@ -76,18 +76,19 @@ def chatdb():
         
         # Get keywords from user input
         keywords = match_query_pattern(user_input)
-        print("Keywords:", keywords)
+        # print("Keywords:", keywords)
 
         if "UPLOAD" in keywords: # FROM JACOB: I THINK WE SHOULD MAKE THIS A MORE INTUITIVE PROCESS (If you type upload, ask what software and then ask for file path)
-            print('upload in kywds')
-            if 'SQL' in keywords:
-                print('SQL in keywords')
-                sql_upload(user_input, login_info)
-            elif 'MONGODB' in keywords:
-                print('Mongo in kywds')
-                mongo_upload(user_input, login_info)
-            else:
-                print('Please specify either SQL or NoSQL upload.')
+            try:
+                if 'SQL' in keywords:
+                    sql_upload(user_input, login_info)
+                elif 'MONGODB' in keywords:
+                    mongo_upload(user_input, login_info)
+                else:
+                    print('Please specify either SQL or NoSQL upload.')
+            except FileNotFoundError as e:
+                print("Couldn\'t find the file, please give an exact or relative file path")
+        
 
         elif 'EXPLORE' in keywords:
             print('showing tables')
@@ -110,21 +111,25 @@ def chatdb():
             elif 'MONGODB' in keywords:
                 pass
             else:
-                print("Please specify either SQL or MONGODB in your request.")
+                print("Please specify either SQL or MONGODB in your request for examples.")
 
         elif 'SELECT' in keywords or 'AGGREGATE' in keywords:
             if gen_queries.sql_or_nosql(user_input, login_info) == 'SQL':
                 print('Generating an SQL query...')
-                gen_queries.execute_sql_query(user_input, keywords, login_info)
+                try:
+                    gen_queries.execute_sql_query(user_input, keywords, login_info)
+                except:
+                    print('Error generating query, try rephrasing your request')
             elif gen_queries.sql_or_nosql(user_input, login_info) == 'MONGODB':
                 print('Generating a MongoDB query...')
+                try:
+                    gen_queries.execute_mongo_query(user_input, keywords, login_info)
+                except:
+                    print('Error generating query, try rephrasing your request')
             else:
                 print('In your query, please specify which table/collection you would like to use.')
 
-
-
     return  
-
 
 
 chatdb()
