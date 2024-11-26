@@ -3,6 +3,7 @@ import pymongo
 import sys
 from input_process import match_query_pattern
 from upload import sql_upload, mongo_upload
+import gen_queries
 
 """
 Setup MySQL DB
@@ -19,9 +20,10 @@ login_info = {
     'endpoint': "localhost",
     'username': "root",
     'password': "MySQLDBP455",
-    'database_name': "chatdb",
+    'sql_database_name': "chatdb",
     'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452'
+    'mongo_password': 'AtM0nG0d1452',
+    'mongo_database_name': "ChatDB",
 }
 
 
@@ -64,6 +66,11 @@ def chatdb():
         elif 'EXAMPLE' in keywords:
             print('example in keywds')
             response = (keywords)
+
+        elif 'SELECT' in keywords or 'AGGREGATE' in keywords:
+
+            if gen_queries.sql_or_nosql(user_input, login_info) == 'SQL':
+                gen_queries.execute_sql_query(user_input, keywords, login_info)
 
 
         print(reponse)
