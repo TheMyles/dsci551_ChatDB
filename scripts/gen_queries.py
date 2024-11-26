@@ -331,7 +331,7 @@ def sql_or_nosql(user_input, login_info):
 
 
 def execute_mongo_query(user_input, keywords, login_info):
-    user_list = user_input.translate(str.maketrans('', '', string.punctuation)).split()
+    user_list = user_input.translate(str.maketrans('', '', string.punctuation.replace('_', ''))).split()
 
     # Connect to MongoDB
     connection_string = f'mongodb+srv://{login_info['mongo_username']}:{login_info['mongo_password']}@cluster0.tgu2d.mongodb.net/'

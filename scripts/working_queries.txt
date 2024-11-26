@@ -1,4 +1,5 @@
 
+// SQL
 user_input = 'show me all columns where food_type is burgers and city is alameda from generalinfo'
 query = SELECT * FROM generalinfo WHERE food_type = 'burgers' AND city = 'alameda' ;
 
@@ -7,3 +8,7 @@ query = SELECT street_num, city FROM location WHERE city = 'san francisco' ORDER
 
 user_input =  "How many restaurants have each review from generalinfo" 
 query = SELECT review, COUNT(*) FROM generalinfo GROUP BY review;
+
+
+// MongoDB
+
