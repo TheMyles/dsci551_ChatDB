@@ -17,7 +17,7 @@ QUERY_PATTERNS = {
     "ORDER BY": ["order by", "sort", "ascending", "descending", "rank", "arrange", "prioritize",
                  "sequence", "order", "hierarchy", "top", "bottom", "sorted", "biggest"],
     "WHERE": ["where", "condition", "filter", "over", "under", "less", "greater", "who",
-              "which", "that", "criteria", "subset", "find", "limit", "restrict", "search",
+              "which", "that", "criteria", "subset", "find", "restrict", "search",
               "match", "constraint", 'fewer', 'below', 'equal', 'equals', 'matches'],
     "JOIN": ["join", "merge", "combine", "foreign key", "unite", "relate", "link",
              "connect", "associate", "bridge", "union", "inner", "outer", "left", "right"],
