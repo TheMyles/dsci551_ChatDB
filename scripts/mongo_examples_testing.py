@@ -1044,9 +1044,9 @@ mongo_username = login_info['mongo_username']
 mongo_password = login_info['mongo_password']
 database_name = login_info['mongo_database_name']
 
-# connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
-# client = pymongo.MongoClient(connection_string)
-# db = client[database_name]
+connection_string = f'mongodb+srv://{mongo_username}:{mongo_password}@cluster0.tgu2d.mongodb.net/'
+client = pymongo.MongoClient(connection_string)
+db = client[database_name]
 
 # Function to execute MongoDB queries with result limit
 def execute_mongodb_query(query, db):
@@ -1071,25 +1071,6 @@ def execute_mongodb_query(query, db):
         return f"Error: {str(e)}"
 
 # keywords = ['aggregate']
-<<<<<<< Updated upstream
-
-# # Generate, execute, and print 5 MongoDB queries with results
-# results = []
-# while len(results) < 5:  # Ensure we collect 5 queries with non-empty results
-#     query, summary = generate_mongodb_query(metadata, client)
-#         # Check if all keywords are present in the query
-#     if not all(keyword.lower() in query.lower() for keyword in keywords):
-#         continue  # Retry if the query does not contain all keywords
-#     if query.startswith("Error:"):
-#         continue  # Generate a new query if there's an error
-#     result = execute_mongodb_query(eval(query), db)  # Evaluate and execute the query
-#     if isinstance(result, str) and result.startswith("Error:"):
-#         continue  # Generate a new query if execution fails
-#     if not result:  # Skip queries that return an empty result set
-#         continue
-#     # Append the successful query and its output
-#     results.append({"query": query, "summary": summary, "output": result})
-=======
 exclusion_words = ['$ne']
 
 # Generate, execute, and print 5 MongoDB queries with results
@@ -1111,7 +1092,6 @@ while len(results) < 5:  # Ensure we collect 5 queries with non-empty results
         continue
     # Append the successful query and its output
     results.append({"query": query, "summary": summary, "output": result})
->>>>>>> Stashed changes
 
 # # Print the queries, summaries, and results
 # for result in results:
