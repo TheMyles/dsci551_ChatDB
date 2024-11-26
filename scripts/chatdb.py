@@ -12,6 +12,10 @@ from generate_sql_examples_final import find_keywords_for_examples
 from generate_sql_examples_final import display_queries
 from generate_sql_examples_final import execute_queries
 
+from mongo_examples_testing import get_mongodb_metadata
+
+from data_exploration import explore_data
+
 import tabulate
 from tabulate import tabulate
 
@@ -85,8 +89,12 @@ def chatdb():
             else:
                 print('Please specify either SQL or NoSQL upload.')
 
-        elif 'SHOW' in keywords:
+        elif 'EXPLORE' in keywords:
             print('showing tables')
+            sql_metadata = get_mysql_metadata(login_info)
+            mongo_metadata = get_mongodb_metadata(login_info)
+
+            explore_data(sql_metadata, mongo_metadata, connection)
             
         elif 'EXAMPLE' in keywords:
             # print('example in keywds')
