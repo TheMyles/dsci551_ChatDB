@@ -35,25 +35,25 @@ Functions in secondary py files
     Generating queries] * 2 
 """
 
-# login_info = {
-#     'endpoint': "localhost",
-#     'username': "root",
-#     'password': "MySQLDBP455",
-#     'sql_database_name': "chatdb",
-#     'mongo_username': 'mdmolnar',
-#     'mongo_password': 'AtM0nG0d1452',
-#     'mongo_database_name': "ChatDB",
-# }
-
 login_info = {
     'endpoint': "localhost",
     'username': "root",
-    'password': "Bobo8128!",
+    'password': "MySQLDBP455",
     'sql_database_name': "chatdb",
     'mongo_username': 'mdmolnar',
     'mongo_password': 'AtM0nG0d1452',
     'mongo_database_name': "ChatDB",
 }
+
+# login_info = {
+#     'endpoint': "localhost",
+#     'username': "root",
+#     'password': "Bobo8128!",
+#     'sql_database_name': "chatdb",
+#     'mongo_username': 'mdmolnar',
+#     'mongo_password': 'AtM0nG0d1452',
+#     'mongo_database_name': "ChatDB",
+# }
 
 connection = pymysql.connect(
     host=login_info['endpoint'],
@@ -133,14 +133,14 @@ def chatdb():
                 print('Generating an SQL query...')
                 try:
                     gen_queries.execute_sql_query(user_input, keywords, login_info)
-                except:
-                    print('Error generating query, try rephrasing your request')
+                except Exception as e:
+                    print(f'Error generating query, try rephrasing your request. Error: \n{e}')
             elif gen_queries.sql_or_nosql(user_input, login_info) == 'MONGODB':
                 print('Generating a MongoDB query...')
                 try:
                     gen_queries.execute_mongo_query(user_input, keywords, login_info)
                 except:
-                    print('Error generating query, try rephrasing your request')
+                    print(f'Error generating query, try rephrasing your request. Error: \n{e}')
             else:
                 print('In your query, please specify which table/collection you would like to use.')
 

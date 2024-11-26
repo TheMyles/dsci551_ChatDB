@@ -123,6 +123,7 @@ def execute_sql_query(user_input, keywords, login_info):
                     query += f'{key}({processes[idx+1]})'
                 else:
                     query += f'{key}({processes[idx+1]}), '
+                assoc_cols.append(f'{key}({processes[idx+1]})')
 
         query += ' '
 
@@ -226,7 +227,7 @@ def execute_sql_query(user_input, keywords, login_info):
                 query += f'GROUP BY {col}'
             else:
                 query += f', {col}'
-
+        query += ' '
         query = query.replace("SELECT", f"SELECT {col},")
     
     if 'HAVING' in keywords:
@@ -235,6 +236,7 @@ def execute_sql_query(user_input, keywords, login_info):
     if 'ORDER BY' in keywords:
         asc = 'ASC'
         order = []
+        print('ob:', assoc_cols)
 
         for i, word in enumerate(user_list):
             try:
