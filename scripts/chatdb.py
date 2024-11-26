@@ -78,7 +78,7 @@ def chatdb():
         keywords = match_query_pattern(user_input)
         print("Keywords:", keywords)
 
-        if "UPLOAD" in keywords:
+        if "UPLOAD" in keywords: # FROM JACOB: I THINK WE SHOULD MAKE THIS A MORE INTUITIVE PROCESS (If you type upload, ask what software and then ask for file path)
             print('upload in kywds')
             if 'SQL' in keywords:
                 print('SQL in keywords')
