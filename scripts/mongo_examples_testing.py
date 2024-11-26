@@ -1093,6 +1093,8 @@ while len(results) < 5:  # Ensure we collect 5 queries with non-empty results
     # Append the successful query and its output
     results.append({"query": query, "summary": summary, "output": result})
 
+# print(results)
+
 # # Print the queries, summaries, and results
 # for result in results:
 #     print("\nGenerated Query:")
