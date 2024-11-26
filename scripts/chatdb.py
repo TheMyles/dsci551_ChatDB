@@ -93,7 +93,7 @@ def chatdb():
             sql_metadata = get_mysql_metadata(login_info)
             mongo_metadata = get_mongodb_metadata(login_info)
 
-            explore_data(sql_metadata, mongo_metadata, connection)
+            explore_data(sql_metadata, mongo_metadata, connection, login_info)
             
         elif 'EXAMPLE' in keywords:
             # print('example in keywds')

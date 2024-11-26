@@ -7,24 +7,24 @@ from generate_sql_examples_final import execute_queries
 
 from mongo_examples_testing import get_mongodb_metadata
 
-login_info = {
-    'endpoint': "localhost",
-    'username': "root",
-    'password': "Bobo8128!",
-    'sql_database_name': "chatdb",
-    'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452',
-    'mongo_database_name': "ChatDB",
-}
+# login_info = {
+#     'endpoint': "localhost",
+#     'username': "root",
+#     'password': "Bobo8128!",
+#     'sql_database_name': "chatdb",
+#     'mongo_username': 'mdmolnar',
+#     'mongo_password': 'AtM0nG0d1452',
+#     'mongo_database_name': "ChatDB",
+# }
 
-connection = pymysql.connect(
-    host=login_info['endpoint'],
-    user=login_info['username'],
-    password=login_info['password'],
-    database=login_info['sql_database_name']
-)
+# connection = pymysql.connect(
+#     host=login_info['endpoint'],
+#     user=login_info['username'],
+#     password=login_info['password'],
+#     database=login_info['sql_database_name']
+# )
 
-def explore_data(sql_metadata, mongo_metadata, connection):
+def explore_data(sql_metadata, mongo_metadata, connection, login_info):
     # While loop to keep asking for valid input
     while True:
         # Prompt the user to select MongoDB or SQL
@@ -37,7 +37,7 @@ def explore_data(sql_metadata, mongo_metadata, connection):
         
         # If the user selects MongoDB
         elif user_choice == 'mongodb':
-            explore_mongodb(mongo_metadata, connection)
+            explore_mongodb(mongo_metadata, login_info, connection)
             break  # Exit the loop once MongoDB is selected and handled
         
         # If the user enters an invalid selection
@@ -84,7 +84,7 @@ def explore_sql(metadata, connection):
 
 
 # Function to explore MongoDB data by showing collections, fields, and sample data
-def explore_mongodb(metadata, connection=None):
+def explore_mongodb(metadata, login_info, connection=None):
     # MongoDB credentials and connection string
     mongo_username = login_info['mongo_username']
     mongo_password = login_info['mongo_password']
