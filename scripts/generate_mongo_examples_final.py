@@ -166,7 +166,8 @@ def generate_mongodb_query(metadata, client):
     ]
 
     # Pick a random collection
-    collection_name = 'UW_std_person'
+    # collection_name = 'UW_std_person'
+    collection_name = random.choice(list(metadata.keys()))
     fields = metadata[collection_name]  # Get field metadata for the collection
     
     # # Check for numeric fields
