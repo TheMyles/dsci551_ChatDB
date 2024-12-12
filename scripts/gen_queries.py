@@ -1,6 +1,6 @@
 from generate_sql_examples_final import get_mysql_metadata
 import numpy as np
-from mongo_examples_testing import get_mongodb_metadata
+from generate_mongo_examples_final import get_mongodb_metadata
 import pymysql
 from tabulate import tabulate
 import string
@@ -102,7 +102,7 @@ def execute_sql_query(user_input, keywords, login_info):
             query += 'SELECT ' + ', '.join(assoc_cols) + ' '
     
     elif 'AGGREGATE' in keywords:
-        processes = []
+        processes = []  # ex: ['AVG', 'col1', 'COUNT', '*']
 
         for key, value in aggregate_words.items():
             for i, word in enumerate(user_list):
@@ -214,7 +214,7 @@ def execute_sql_query(user_input, keywords, login_info):
         query += ' '
 
     if 'GROUP BY' in keywords:
-        group_by = []
+        group_by = []  # ex: ['col1', 'col2']
 
         # for value in group_words:
         for i, word in enumerate(user_list):
@@ -251,7 +251,6 @@ def execute_sql_query(user_input, keywords, login_info):
     if 'ORDER BY' in keywords:
         asc = 'ASC'
         order = []
-        print('ob:', assoc_cols)
 
         for i, word in enumerate(user_list):
             try:
@@ -408,14 +407,14 @@ def execute_mongo_query(user_input, keywords, login_info):
     pipeline = []
     # Handle WHERE conditions (filters)
     if 'WHERE' in keywords:
-        match_stage = {}
+        match_stage = {}  # ex: {col: {$gt: value}}
         for key, values in where_words.items():
             for i, word in enumerate(user_list):
                 try:
                     bigram = word + f' {user_list[i+1]}'
                 except:
                     pass
-                if word.lower() in values:
+                if word.lower() in values or bigram.lower() in values:
                     if user_list[i-1] in assoc_cols:
                         field = user_list[i - 1]
                     elif user_list[i-2] in assoc_cols:

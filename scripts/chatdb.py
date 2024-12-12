@@ -80,6 +80,7 @@ def chatdb():
 
     while continue_running:
         user_input = input("Message ChatDB: ")
+        print("\nChatDB Response:")
         memory.append(user_input)
 
         # Exiting ChatDB
@@ -92,7 +93,7 @@ def chatdb():
         keywords = match_query_pattern(user_input)
         print("Keywords:", keywords)
 
-        if "UPLOAD" in keywords: # FROM JACOB: I THINK WE SHOULD MAKE THIS A MORE INTUITIVE PROCESS (If you type upload, ask what software and then ask for file path)
+        if "UPLOAD" in keywords: 
             try:
                 if 'SQL' in keywords:
                     sql_upload(user_input, login_info)
@@ -127,8 +128,7 @@ def chatdb():
 
                 keywords_with_aggregates = find_keywords_for_examples_mongo(keywords, user_input)
                 print(keywords_with_aggregates)
-                # display_mongo_queries(metadata, login_info, keywords_with_aggregates)
-                # generate_and_execute_mongo_queries_with_keywords(metadata, login_info, keywords_with_aggregates)
+
                 generate_and_display_queries(login_info, metadata, keywords_with_aggregates)
 
             else:
