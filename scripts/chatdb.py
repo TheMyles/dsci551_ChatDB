@@ -37,24 +37,24 @@ Functions in secondary py files
     Generating queries] * 2 
 """
 
-login_info = {
-    'endpoint': "localhost",
-    'username': "root",
-    'password': "MySQLDBP455",
-    'sql_database_name': "chatdb",
-    'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452',
-    'mongo_database_name': "ChatDB",
-}
+# login_info = {
+#     'endpoint': "localhost",
+#     'username': "root",
+#     'password': "MySQLDBP455",
+#     'sql_database_name': "chatdb",
+#     'mongo_username': 'mdmolnar',
+#     'mongo_password': 'AtM0nG0d1452',
+#     'mongo_database_name': "ChatDB",
+# }
 
 login_info = {
-    'endpoint': "localhost",
-    'username': "root",
-    'password': "Bobo8128!",
-    'sql_database_name': "chatdb",
-    'mongo_username': 'mdmolnar',
-    'mongo_password': 'AtM0nG0d1452',
-    'mongo_database_name': "ChatDB",
+    'endpoint': "localhost",                 # USER CAN MODIFY THIS LINE AS NECESSARY
+    'username': "root",                      # USER CAN MODIFY THIS LINE AS NECESSARY
+    'password': "Bobo8128!",                 # USER CAN MODIFY THIS LINE AS NECESSARY
+    'sql_database_name': "chatdb",           # USER CAN MODIFY THIS LINE AS NECESSARY
+    'mongo_username': 'mdmolnar',            # DO NOT MODIFY
+    'mongo_password': 'AtM0nG0d1452',        # DO NOT MODIFY
+    'mongo_database_name': "ChatDB",         # DO NOT MODIFY
 }
 
 connection = pymysql.connect(
