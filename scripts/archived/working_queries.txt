@@ -6,7 +6,7 @@ query = SELECT * FROM generalinfo WHERE food_type = 'burgers' AND city = 'alamed
 user_input = 'show me the 5 biggest street_num, filter to where city is san francisco and use the location table'
 query = SELECT street_num, city FROM location WHERE city = 'san francisco' ORDER BY street_num DESC LIMIT 5.0;
 
-user_input =  "How many restaurants have each review from generalinfo" 
+user_input =  "Please show me how many restaurants are in each food_type from generalinfo and the average review" 
 query = SELECT review, COUNT(*) FROM generalinfo GROUP BY review;
 
 user_input = 'show me average p_id, maximum p_id, minimum p_id, and count of all rows from person grouped by hasPosition'
