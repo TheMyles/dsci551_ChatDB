@@ -5,7 +5,7 @@ import pandas as pd
 from generate_sql_examples_final import get_mysql_metadata
 from generate_sql_examples_final import execute_queries
 
-from mongo_examples_testing import get_mongodb_metadata
+from generate_mongo_examples_final import get_mongodb_metadata
 
 # login_info = {
 #     'endpoint': "localhost",
