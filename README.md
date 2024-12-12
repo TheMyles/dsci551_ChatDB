@@ -3,7 +3,7 @@ This GitHub is a collection of files created for our final class project for DSC
 It was created and is maintained by Jacob Graber and Myles Molnar.
 
 ## Prerequisites
-Users must have MySQL Server installed and running on their local machine.
+Users must have MySQL Server installed and running on their local machine. See 'requirements.txt' for all necessary libraries and packages.
 
 ## Architectural Overview
 Below is a summary of the various directories in this repository.
