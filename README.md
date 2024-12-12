@@ -47,6 +47,7 @@ After launching ChatDB, the core functionality of the application should become 
 **User-Inputted Queries:**
 - Prompt ChatDB to generate and execute a specific SQL or MongoDB query using natural language.
 - Below is a list of user inputs that will work on the pre-provided sample data stored in ChatDB.
+
 *SQL*
 * Show me all columns where food_type matches burgers from generalinfo
 * Show me all columns where food_type is burgers and city is alameda from generalinfo
